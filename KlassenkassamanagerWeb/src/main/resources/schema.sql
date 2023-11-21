@@ -1,3 +1,9 @@
+CREATE TABLE Class (
+                       id INT PRIMARY KEY AUTO_INCREMENT,
+                       department VARCHAR,
+                       schoolLevel INT
+);
+
 CREATE TABLE Student (
     id INT PRIMARY KEY AUTO_INCREMENT,
     firstname VARCHAR,
@@ -8,8 +14,3 @@ CREATE TABLE Student (
     FOREIGN KEY (classId) REFERENCES Class(id)
 );
 
-CREATE TABLE Class (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    department VARCHAR,
-    schoolLevel INT
-);
