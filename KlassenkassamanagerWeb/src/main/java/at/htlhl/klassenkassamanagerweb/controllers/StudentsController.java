@@ -22,6 +22,6 @@ public class StudentsController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "get latest temperature")
     public Student findLatest() throws SQLException {
-        return studentRepository.getStudentById(0);
+        return studentRepository.getStudentById(1);
     }
 }
