@@ -16,4 +16,28 @@ public class Student {
         this.toPayAmount = toPayAmount;
         this.classId = classId;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public float getDepositAmount() {
+        return depositAmount;
+    }
+
+    public float getToPayAmount() {
+        return toPayAmount;
+    }
+
+    public int getClassId() {
+        return classId;
+    }
 }
