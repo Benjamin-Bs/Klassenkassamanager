@@ -3,23 +3,27 @@ import logo from './logo.svg';
 import './css/App.css';
 import Sidebar from './Components/Sidebar';
 import StudentTable from "./Components/StudentTable";
-import User from "./Components/User";
+import Navbar from "./Components/Navbar";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <Sidebar />
+    return (
+        <div className="App">
 
-      </header>
-    </div>
-  );
+            <Navbar />
+            <Sidebar />
+
+            <div>
+                <StudentTable />
+            </div>
+
+        </div>
+    );
 }
 
-function MyButton(){
-  return(
-      <button>Hello There</button>
-  );
+function MyButton() {
+    return (
+        <button>Hello There</button>
+    );
 }
 
 export default App;
