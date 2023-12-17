@@ -10,20 +10,17 @@ function App() {
         <div className="App">
 
             <Navbar />
-            <Sidebar />
 
-            <div>
-                <StudentTable />
+            <div className="row" style={{width : '100%'}}>
+                <div className="col-2">
+                    <Sidebar />
+                </div>
+                <div className="col-9">
+                    <StudentTable />
+                </div>
             </div>
 
         </div>
     );
 }
-
-function MyButton() {
-    return (
-        <button>Hello There</button>
-    );
-}
-
 export default App;
