@@ -19,16 +19,9 @@ public class StudentsController {
 
     @GetMapping(value = "/Student/{id}", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "get latest temperature")
+    @Operation(summary = "get student")
     public Student getStudentFromId(@PathVariable int id) throws SQLException {
         return studentRepository.getStudentById(id);
-    }
-
-    @GetMapping(value = "/Class/{id}", produces = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "get latest temperature")
-    public ArrayList<Student> getStudentsFromClassId(@PathVariable int id) throws SQLException {
-        return studentRepository.getStudentsByClassId(id);
     }
 
     @Autowired

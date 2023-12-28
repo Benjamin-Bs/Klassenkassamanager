@@ -14,9 +14,9 @@ export const fetchData = async (endpoint) => {
 };*/
 
 
-function getStudentsFromClass(classID) {
+async function getStudentsFromClass(apiUrl) {
 
-    const students = [
+    /*const students = [
         {
             studentID: 5,
             firstname: "Bob",
@@ -40,7 +40,25 @@ function getStudentsFromClass(classID) {
         }
     ];
 
-    return students;
+    return students;*/
+    return fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data)
+            // Return the fetched data to be used in the next `then` block
+            return data;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            // You may want to rethrow the error to propagate it to the caller
+            throw error;
+        });
+
 }
 export {getStudentsFromClass};
 

@@ -18,24 +18,28 @@ public class StudentRepository {
 
     public static final Logger LOGGER = (Logger) LoggerFactory.getLogger(StudentRepository.class);
 
-    private static final String SELECT_STUDENT_SQL =
-            "SELECT * FROM Student WHERE id = ?;";
-    private static final String SELECT_STUDENTS_BY_CLASS_SQL =
-            "SELECT * FROM Student WHERE classId = ?;";
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     private Student createStudent(ResultSet rs) throws SQLException {
         return new Student(
-                rs.getInt("id"),
+                rs.getInt("userId"),
                 rs.getString("firstname"),
                 rs.getString("lastname"),
                 rs.getFloat("depositAmount"),
-                rs.getFloat("toPayAmount"),
-                rs.getInt("classId")
+                rs.getFloat("toPayAmount")
         );
     }
+
+    private static final String SELECT_STUDENT_SQL =
+            "SELECT * FROM Student WHERE id = ?;";
+
+    private static final String SELECT_STUDENTS_BY_ARG_SQL =
+            """
+                SELECT * FROM Student 
+                WHERE >ARG< = ?;
+            """;
+
 
     public Student getStudentById(int id) throws SQLException {
         PreparedStatement ps = jdbcTemplate.getDataSource().getConnection()
@@ -50,10 +54,10 @@ public class StudentRepository {
         }
     }
 
-    public ArrayList<Student> getStudentsByClassId(int classId) throws SQLException {
+    public ArrayList<Student> getStudentsByArg(String arg, int value) throws SQLException {
         PreparedStatement ps = jdbcTemplate.getDataSource().getConnection()
-                .prepareStatement(SELECT_STUDENTS_BY_CLASS_SQL);
-        ps.setInt(1, classId);
+                .prepareStatement(SELECT_STUDENTS_BY_ARG_SQL.replace(">ARG<", arg));
+        ps.setInt(1, value);
         ResultSet rs = ps.executeQuery();
 
         ArrayList<Student> students = new ArrayList<>();

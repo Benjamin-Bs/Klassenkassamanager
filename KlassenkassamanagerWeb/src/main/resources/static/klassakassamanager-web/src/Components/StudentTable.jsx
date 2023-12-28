@@ -1,11 +1,20 @@
 // Importiere die React-Bibliothek und die benötigten Komponenten
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getStudentsFromClass } from '../apiUtility';
 
 // Erstelle deine React-Komponente
 function StudentTable() {
+    const [students, setStudents] = useState([]);
+
     // Rufe die Funktion 'getStudentsFromClass' auf, um die Schülerdaten zu erhalten
-    const students = getStudentsFromClass();
+    useEffect(() => {
+        const fetchData = async () => {
+            const studentsData = await getStudentsFromClass('http://localhost:8080/klassenkassa-manager/Class/1/Students');
+            setStudents(studentsData);
+        };
+
+        fetchData();
+    }, []);
 
     // Render-Funktion für die Tabelle
     const renderTable = () => {
@@ -19,23 +28,26 @@ function StudentTable() {
                     <th scope="col">Einzahlen</th>
                     <th scope="col">Bereits eingezahlt</th>
                     <th scope="col">Offener Betrag</th>
-                    <th scope="col"></th>
+                    <th scope="col"> </th>
                 </tr>
                 </thead>
-                <tbody>
-                {students.map((student, index) => (
-                    <tr key={index}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{student.firstname}</td>
-                        <td>{student.lastname}</td>
-                        <td>{student.depositAmount}</td>
-                        <td>{student.toPayAmount}</td>
-                        <td>{student.depositAmount - student.toPayAmount}</td>
-                    </tr>
-                ))}
-                </tbody>
+                <tbody>{fillTable()}</tbody>
             </table>
         );
+    };
+
+    const fillTable = () => {
+        return students.map((student, index) => (
+            <tr key={index}>
+                <th scope="row">{index + 1}</th>
+                <td>{student.firstname}</td>
+                <td>{student.lastname}</td>
+                <td>{student.toPayAmount}</td>
+                <td>{student.depositAmount}</td>
+                <td>{student.toPayAmount - student.depositAmount}</td>
+                <td>{student.depositAmount >= student.toPayAmount ? "v" : "x"}</td>
+            </tr>
+        ));
     };
 
     // Gib die Tabelle zurück

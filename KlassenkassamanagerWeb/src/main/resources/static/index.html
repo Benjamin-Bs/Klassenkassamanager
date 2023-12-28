@@ -1,20 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Data Example</title>
 </head>
 <body>
-<p>
-    <a href="/klassenkassa-manager/Students">Great the World</a>
-</p>
-<form action="/klassenkassa-manager/Students/" method="GET" id="nameForm">
-    <label for="idField">How should the application call you?</label>
-    <input name="id" id="idField">
-    <button type="submit">Great me!</button>
-</form>
+
+<button id="fetchButton">Fetch Data</button>
+<div id="result"></div>
+
+<script>
+    function fetchData(apiUrl) {
+
+        return fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Return the fetched data to be used in the next `then` block
+                return data;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                // You may want to rethrow the error to propagate it to the caller
+                throw error;
+            });
+    }
+
+    // Usage
+    async function fetchDataAndDisplay() {
+        try {
+            const data = await fetchData('/klassenkassa-manager/Class/1/Students');
+            document.getElementById('result').innerHTML = JSON.stringify(data, null, 2);
+        } catch (error) {
+            console.error('Error in fetchDataAndDisplay:', error);
+            // Handle errors here, if needed
+        }
+    }
+
+    // Call the async function
+    fetchDataAndDisplay();
+</script>
+
 </body>
 </html>
