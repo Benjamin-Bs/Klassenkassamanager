@@ -1,20 +1,22 @@
 // Importiere die React-Bibliothek und die benötigten Komponenten
 import React, { useEffect, useState } from 'react';
-import { getStudentsFromClass } from '../apiUtility';
+import { GET } from '../apiUtility';
 
 // Erstelle deine React-Komponente
-function StudentTable() {
+function StudentTable({activeClass}) {
     const [students, setStudents] = useState([]);
 
     // Rufe die Funktion 'getStudentsFromClass' auf, um die Schülerdaten zu erhalten
     useEffect(() => {
         const fetchData = async () => {
-            const studentsData = await getStudentsFromClass('http://localhost:8080/klassenkassa-manager/Class/1/Students');
-            setStudents(studentsData);
+            if (activeClass.id !== undefined) {
+                const studentsData = await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`);
+                setStudents(studentsData);
+            }
         };
 
         fetchData();
-    }, []);
+    }, [activeClass]);
 
     // Render-Funktion für die Tabelle
     const renderTable = () => {
@@ -53,6 +55,7 @@ function StudentTable() {
     // Gib die Tabelle zurück
     return (
         <div className="bd-example">
+            <div style={{ height: '5dvh'}}></div>
             <div
                 data-bs-spy="scroll"
                 data-bs-target="#navbar-example2"
@@ -60,7 +63,7 @@ function StudentTable() {
                 data-bs-smooth-scroll="true"
                 className="scrollspy-example bg-body-tertiary p-3 rounded-2"
                 tabIndex="0"
-                style={{ height: '800px', overflowY: 'scroll' }}
+                style={{ maxHeight: '80dvh', overflowY: 'auto' }}
             >
                 {renderTable()}
             </div>

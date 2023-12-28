@@ -1,22 +1,22 @@
 package at.htlhl.klassenkassamanagerweb.models;
 
 public class Student {
-    private int id;
+    private String userName;
     private String firstname;
     private String lastname;
     private float depositAmount;
     private float toPayAmount;
 
-    public Student(int id, String firstname, String lastname, float depositAmount, float toPayAmount) {
-        this.id = id;
+    public Student(String userName, String firstname, String lastname, float depositAmount, float toPayAmount) {
+        this.userName = userName;
         this.firstname = firstname;
         this.lastname = lastname;
         this.depositAmount = depositAmount;
         this.toPayAmount = toPayAmount;
     }
 
-    public int getId() {
-        return id;
+    public String getUserName() {
+        return userName;
     }
 
     public String getFirstname() {

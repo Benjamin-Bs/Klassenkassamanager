@@ -23,7 +23,7 @@ public class StudentRepository {
 
     private Student createStudent(ResultSet rs) throws SQLException {
         return new Student(
-                rs.getInt("userId"),
+                rs.getString("userName"),
                 rs.getString("firstname"),
                 rs.getString("lastname"),
                 rs.getFloat("depositAmount"),

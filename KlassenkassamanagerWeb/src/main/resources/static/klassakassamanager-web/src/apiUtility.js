@@ -14,7 +14,7 @@ export const fetchData = async (endpoint) => {
 };*/
 
 
-async function getStudentsFromClass(apiUrl) {
+async function GET(apiUrl) {
 
     /*const students = [
         {
@@ -60,6 +60,5 @@ async function getStudentsFromClass(apiUrl) {
         });
 
 }
-export {getStudentsFromClass};
 
-
+export {GET};
