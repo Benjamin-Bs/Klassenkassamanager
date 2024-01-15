@@ -7,6 +7,7 @@ import at.htlhl.klassenkassamanagerweb.repositories.StudentRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -44,21 +45,22 @@ public class ClassController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Create a Class")
     public Class addClass(@RequestBody Class classObject) throws SQLException {
-        return null;
+        return classRepository.addClass(classObject);
     }
 
     @PatchMapping(value = "/{id}", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Edit a Class by id")
     public Class editClassById(@PathVariable int id,  @RequestBody Class classObject) throws SQLException {
-        return classRepository.getClassById(id);
+        return classRepository.updateStudent(id, classObject);
     }
 
-    @DeleteMapping(value = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping(value = "/{id}", produces = "text/plain")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete a Class by id")
-    public Class deleteClassById(@PathVariable int id) throws SQLException {
-        return classRepository.getClassById(id);
+    public ResponseEntity<String> deleteClassById(@PathVariable int id) throws SQLException {
+        classRepository.deleteClassById(id);
+        return ResponseEntity.noContent().build();
     }
 
 

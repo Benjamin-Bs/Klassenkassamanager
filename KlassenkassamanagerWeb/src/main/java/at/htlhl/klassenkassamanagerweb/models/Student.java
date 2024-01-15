@@ -2,7 +2,6 @@ package at.htlhl.klassenkassamanagerweb.models;
 
 public class Student {
 
-    private int id;
     private int classId;
     private String userName;
     private String firstname;
@@ -10,8 +9,7 @@ public class Student {
     private float depositAmount;
     private float toPayAmount;
 
-    public Student(int id, int classId, String userName, String firstname, String lastname, float depositAmount, float toPayAmount) {
-        this.id = id;
+    public Student(int classId, String userName, String firstname, String lastname, float depositAmount, float toPayAmount) {
         this.classId = classId;
         this.userName = userName;
         this.firstname = firstname;
@@ -20,9 +18,6 @@ public class Student {
         this.toPayAmount = toPayAmount;
     }
 
-    public int getId() {
-        return id;
-    }
 
     public int getClassId() {
         return classId;
@@ -46,9 +41,5 @@ public class Student {
 
     public float getToPayAmount() {
         return toPayAmount;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

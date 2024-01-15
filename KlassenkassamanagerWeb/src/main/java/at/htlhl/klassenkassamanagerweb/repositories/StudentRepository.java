@@ -23,7 +23,6 @@ public class StudentRepository {
 
     private Student createStudent(ResultSet rs) throws SQLException {
         return new Student(
-                rs.getInt("id"),
                 rs.getInt("classId"),
                 rs.getString("userName"),
                 rs.getString("firstname"),
@@ -33,18 +32,27 @@ public class StudentRepository {
         );
     }
 
+    private void addStudentToResultSet(PreparedStatement ps, Student student) throws SQLException {
+        ps.setInt(1, student.getClassId());
+        ps.setString(2, student.getUserName());
+        ps.setString(3, student.getFirstname());
+        ps.setString(4, student.getLastname());
+        ps.setFloat(5, student.getDepositAmount());
+        ps.setFloat(6, student.getToPayAmount());
+    }
+
     private static final String SELECT_STUDENT_SQL =
             "SELECT * FROM Student " +
             "WHERE id = ?;";
 
     private static final String INSERT_STUDENT_SQL =
             "INSERT INTO Student " +
-            "classId, userName, firstname, lastname, depositAmount, toPayAmount " +
+            "(classId, userName, firstname, lastname, depositAmount, toPayAmount) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
 
     private static final String UPDATE_STUDENT_SQL =
-            "UPDATE Student SET" +
-            "classId = ?, userName = ?, firstname = ?, lastname = ?, depositAmount = ?, toPayAmount = ?" +
+            "UPDATE Student SET " +
+            "classId = ?, userName = ?, firstname = ?, lastname = ?, depositAmount = ?, toPayAmount = ? " +
             "WHERE id = ?";
 
     private static final String DELETE_STUDENT_SQL =
@@ -86,42 +94,31 @@ public class StudentRepository {
     }
 
     public Student addStudent(int classId, Student student) throws SQLException {
-        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(INSERT_STUDENT_SQL, new String[]{"id"})) {
+        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(INSERT_STUDENT_SQL)) {
+            addStudentToResultSet(ps, student);
             ps.setInt(1, classId);
-            ps.setString(2, student.getUserName());
-            ps.setString(3, student.getFirstname());
-            ps.setString(4, student.getLastname());
-            ps.setFloat(5, student.getDepositAmount());
-            ps.setFloat(6, student.getToPayAmount());
 
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                // Retrieve the auto-generated ID after insertion
-                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int generatedId = generatedKeys.getInt(1);
-                        student.setId(generatedId);
-                        LOGGER.info("Student added successfully with ID: {}", generatedId);
+                //try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    //if (generatedKeys.next()) {
+                    //    int generatedId = generatedKeys.getInt(1);
+                    //    LOGGER.info("Student added successfully with ID: {}", generatedId);
                         return student;
-                    } else {
-                        throw new SQLException("Failed to get the auto-generated ID after student insertion");
-                    }
-                }
+                    //} else {
+                    //    throw new SQLException("Failed to get the auto-generated ID after student insertion");
+                    //}
+                //}
             } else {
-                throw new SQLException("Failed to add student");
+                throw new SQLException("Failed to Add Student");
             }
         }
     }
 
     public Student updateStudent(int id, Student student) throws SQLException {
         try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(UPDATE_STUDENT_SQL)) {
-            ps.setInt(1, student.getClassId());
-            ps.setString(2, student.getUserName());
-            ps.setString(3, student.getFirstname());
-            ps.setString(4, student.getLastname());
-            ps.setFloat(5, student.getDepositAmount());
-            ps.setFloat(6, student.getToPayAmount());
+            addStudentToResultSet(ps, student);
             ps.setFloat(7, id);
 
             int rowsAffected = ps.executeUpdate();
