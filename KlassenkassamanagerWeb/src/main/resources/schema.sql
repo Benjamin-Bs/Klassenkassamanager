@@ -1,5 +1,6 @@
 CREATE TABLE WebUser (
-    userName VARCHAR PRIMARY KEY
+    userName VARCHAR PRIMARY KEY,
+    password VARCHAR
 );
 
 CREATE TABLE Class (
@@ -11,6 +12,7 @@ CREATE TABLE Class (
 );
 
 CREATE TABLE Student (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     classId INT,
     userName VARCHAR,
     firstname VARCHAR,

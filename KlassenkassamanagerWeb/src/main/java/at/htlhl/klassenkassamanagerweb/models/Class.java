@@ -8,10 +8,8 @@ public class Class {
     private String ownerName;
     private String department;
     private Date dateOfFounding;
-    private ArrayList<Student> students;
 
     public Class(int id, String ownerName, String department, Date dateOfFounding) {
-        students = new ArrayList<>();
         this.id = id;
         this.ownerName = ownerName;
         this.department = department;

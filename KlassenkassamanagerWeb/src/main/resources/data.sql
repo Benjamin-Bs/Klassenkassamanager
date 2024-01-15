@@ -1,7 +1,7 @@
-INSERT INTO WebUser(userName) VALUES ('Bob');
-INSERT INTO WebUser(userName) VALUES ('Puzzles');
-INSERT INTO WebUser(userName) VALUES ('Dave');
-INSERT INTO WebUser(userName) VALUES ('Tom');
+INSERT INTO WebUser(userName, password) VALUES ('Bob', '123');
+INSERT INTO WebUser(userName, password) VALUES ('Puzzles', 'password');
+INSERT INTO WebUser(userName, password) VALUES ('Dave', 'abc');
+INSERT INTO WebUser(userName, password) VALUES ('Tom', '111');
 
 INSERT INTO Class (ownerName, department, dateOfFounding) VALUES ('Bob', 'IT','2022-9-1');
 INSERT INTO Class (ownerName, department, dateOfFounding) VALUES ('Tom', 'EL','2022-9-1');

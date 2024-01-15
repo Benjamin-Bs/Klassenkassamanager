@@ -1,19 +1,19 @@
 package at.htlhl.klassenkassamanagerweb.models;
 
 public class User {
-    private int id;
-    private String varchar;
+    private String username;
+    private String password;
 
-    public User(int id, String varchar) {
-        this.id = id;
-        this.varchar = varchar;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
-    public int getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public String getVarchar() {
-        return varchar;
+    public String getPassword() {
+        return password;
     }
 }

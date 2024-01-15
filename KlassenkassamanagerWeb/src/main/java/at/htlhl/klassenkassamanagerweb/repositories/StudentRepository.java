@@ -23,6 +23,8 @@ public class StudentRepository {
 
     private Student createStudent(ResultSet rs) throws SQLException {
         return new Student(
+                rs.getInt("id"),
+                rs.getInt("classId"),
                 rs.getString("userName"),
                 rs.getString("firstname"),
                 rs.getString("lastname"),
@@ -32,7 +34,22 @@ public class StudentRepository {
     }
 
     private static final String SELECT_STUDENT_SQL =
-            "SELECT * FROM Student WHERE id = ?;";
+            "SELECT * FROM Student " +
+            "WHERE id = ?;";
+
+    private static final String INSERT_STUDENT_SQL =
+            "INSERT INTO Student " +
+            "classId, userName, firstname, lastname, depositAmount, toPayAmount " +
+            "VALUES (?, ?, ?, ?, ?, ?)";
+
+    private static final String UPDATE_STUDENT_SQL =
+            "UPDATE Student SET" +
+            "classId = ?, userName = ?, firstname = ?, lastname = ?, depositAmount = ?, toPayAmount = ?" +
+            "WHERE id = ?";
+
+    private static final String DELETE_STUDENT_SQL =
+            "DELETE FROM Student " +
+            "WHERE id = ?";
 
     private static final String SELECT_STUDENTS_BY_ARG_SQL =
             """
@@ -68,4 +85,67 @@ public class StudentRepository {
         return students;
     }
 
+    public Student addStudent(int classId, Student student) throws SQLException {
+        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(INSERT_STUDENT_SQL, new String[]{"id"})) {
+            ps.setInt(1, classId);
+            ps.setString(2, student.getUserName());
+            ps.setString(3, student.getFirstname());
+            ps.setString(4, student.getLastname());
+            ps.setFloat(5, student.getDepositAmount());
+            ps.setFloat(6, student.getToPayAmount());
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                // Retrieve the auto-generated ID after insertion
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int generatedId = generatedKeys.getInt(1);
+                        student.setId(generatedId);
+                        LOGGER.info("Student added successfully with ID: {}", generatedId);
+                        return student;
+                    } else {
+                        throw new SQLException("Failed to get the auto-generated ID after student insertion");
+                    }
+                }
+            } else {
+                throw new SQLException("Failed to add student");
+            }
+        }
+    }
+
+    public Student updateStudent(int id, Student student) throws SQLException {
+        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(UPDATE_STUDENT_SQL)) {
+            ps.setInt(1, student.getClassId());
+            ps.setString(2, student.getUserName());
+            ps.setString(3, student.getFirstname());
+            ps.setString(4, student.getLastname());
+            ps.setFloat(5, student.getDepositAmount());
+            ps.setFloat(6, student.getToPayAmount());
+            ps.setFloat(7, id);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                LOGGER.info("Student with ID {} updated successfully", id);
+                // Optionally, you can return the updated student
+                return student;
+            } else {
+                throw new SQLException("Student with ID " + id + " not found or could not be updated");
+            }
+        }
+    }
+
+    public void deleteStudentById(int id) throws SQLException {
+        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(DELETE_STUDENT_SQL)) {
+            ps.setInt(1, id);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                LOGGER.info("Student with ID {} deleted successfully", id);
+            } else {
+                throw new SQLException("Student with ID " + id + " not found or could not be deleted");
+            }
+        }
+    }
 }

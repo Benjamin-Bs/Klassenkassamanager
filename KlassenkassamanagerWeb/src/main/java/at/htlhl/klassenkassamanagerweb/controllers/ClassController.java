@@ -21,15 +21,43 @@ public class ClassController {
 
     @GetMapping(value = "/{id}/Students", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "get students of class")
+    @Operation(summary = "Get all Students of Class")
     public ArrayList<Student> getStudentsFromClass(@PathVariable int id) throws SQLException {
         return studentRepository.getStudentsByArg("classId", id);
     }
 
     @GetMapping(value = "/{id}/Properties", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "get students of class")
+    @Operation(summary = "Get Properties of Class")
     public Class getPropertiesFromClass(@PathVariable int id) throws SQLException {
+        return classRepository.getClassById(id);
+    }
+
+    @PostMapping(value = "/{id}/Student", consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Create a Students in a Class")
+    public Student addStudentToClass(@PathVariable int id, @RequestBody Student student) throws SQLException {
+        return studentRepository.addStudent(id, student);
+    }
+
+    @PostMapping(value = "/", consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Create a Class")
+    public Class addClass(@RequestBody Class classObject) throws SQLException {
+        return null;
+    }
+
+    @PatchMapping(value = "/{id}", consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Edit a Class by id")
+    public Class editClassById(@PathVariable int id,  @RequestBody Class classObject) throws SQLException {
+        return classRepository.getClassById(id);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Delete a Class by id")
+    public Class deleteClassById(@PathVariable int id) throws SQLException {
         return classRepository.getClassById(id);
     }
 
