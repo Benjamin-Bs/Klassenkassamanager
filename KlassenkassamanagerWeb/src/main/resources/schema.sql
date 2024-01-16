@@ -1,5 +1,6 @@
 CREATE TABLE WebUser (
-    userName VARCHAR PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    userName VARCHAR UNIQUE,
     password VARCHAR
 );
 

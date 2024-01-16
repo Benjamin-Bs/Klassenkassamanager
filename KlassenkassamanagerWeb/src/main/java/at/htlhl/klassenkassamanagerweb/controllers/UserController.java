@@ -5,6 +5,7 @@ import at.htlhl.klassenkassamanagerweb.models.Student;
 import at.htlhl.klassenkassamanagerweb.models.User;
 import at.htlhl.klassenkassamanagerweb.repositories.ClassRepository;
 import at.htlhl.klassenkassamanagerweb.repositories.StudentRepository;
+import at.htlhl.klassenkassamanagerweb.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ public class UserController {
 
     StudentRepository studentRepository = new StudentRepository();
     ClassRepository classRepository = new ClassRepository();
+    UserRepository userRepository = new UserRepository();
 
     @GetMapping(value = "/{name}/Classes", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
@@ -27,32 +29,32 @@ public class UserController {
         return classRepository.getClassesByUserName(name);
     }
 
-    @GetMapping(value = "/{id}/", produces = "application/json")
+    @GetMapping(value = "/{id}", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get a User by id")
-    public ArrayList<Student> getUserById(@PathVariable int id) throws SQLException {
-        return null;
+    public User getUserById(@PathVariable int id) throws SQLException {
+        return userRepository.getUserById(id);
     }
 
     @PostMapping(value = "/", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Create a User")
-    public Student addUser(@RequestBody User user) throws SQLException {
-        return null;
+    public void addUser(@RequestBody User user) throws SQLException {
+        userRepository.addUser(user);
     }
 
     @PatchMapping(value = "/{id}", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Edit a User by id")
-    public Class editUserById(@PathVariable int id,  @RequestBody User user) throws SQLException {
-        return null;
+    public User editUserById(@PathVariable int id,  @RequestBody User user) throws SQLException {
+        return userRepository.updateUserById(id, user);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete a User by id")
-    public Class deleteUserById(@PathVariable int id) throws SQLException {
-        return null;
+    public void deleteUserById(@PathVariable int id) throws SQLException {
+        userRepository.deleteUserById(id);
     }
 
     @Autowired
@@ -64,5 +66,11 @@ public class UserController {
     public void setClassRepository(ClassRepository classRepository){
         this.classRepository = classRepository;
     }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
 }
 

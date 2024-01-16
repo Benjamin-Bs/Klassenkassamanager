@@ -30,10 +30,9 @@ public class ClassRepository {
     }
 
     private void addClassToResultSet(PreparedStatement ps, Class classObject) throws SQLException {
-        ps.setInt(1, classObject.getId());
-        ps.setString(2, classObject.getOwnerName());
-        ps.setString(3, classObject.getDepartment());
-        ps.setDate(4, classObject.getDateOfFounding());
+        ps.setString(1, classObject.getOwnerName());
+        ps.setString(2, classObject.getDepartment());
+        ps.setDate(3, classObject.getDateOfFounding());
     }
 
     private static final String SELECT_CLASS_SQL =
@@ -92,7 +91,7 @@ public class ClassRepository {
 
     public Class addClass(Class classObject) throws SQLException {
         try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(INSERT_CLASS_SQL)) {
-
+            addClassToResultSet(ps, classObject);
 
             int rowsAffected = ps.executeUpdate();
 
@@ -115,7 +114,7 @@ public class ClassRepository {
     public Class updateStudent(int id, Class classObject) throws SQLException {
         try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(UPDATE_CLASS_SQL)) {
             addClassToResultSet(ps, classObject);
-            ps.setFloat(7, id);
+            ps.setFloat(4, id);
 
             int rowsAffected = ps.executeUpdate();
 
