@@ -26,9 +26,6 @@ public class UserController {
     ClassRepository classRepository = new ClassRepository();
     UserRepository userRepository = new UserRepository();
 
-    @Autowired
-    private ClassRepository classRepository;
-
     /**
      * Retrieves all classes associated with a user.
      *

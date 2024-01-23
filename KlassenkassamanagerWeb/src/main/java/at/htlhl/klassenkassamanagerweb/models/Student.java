@@ -13,7 +13,7 @@ public class Student {
     /**
      * The username of the student.
      */
-    private String userName;
+    private int userId;
 
     /**
      * The first name of the student.
@@ -45,9 +45,9 @@ public class Student {
      * @param depositAmount The amount of deposit money the student has.
      * @param toPayAmount   The amount the student needs to pay.
      */
-    public Student(int classId, String userName, String firstname, String lastname, float depositAmount, float toPayAmount) {
+    public Student(int classId, int userId, String firstname, String lastname, float depositAmount, float toPayAmount) {
         this.classId = classId;
-        this.userName = userName;
+        this.userId = userId;
         this.firstname = firstname;
         this.lastname = lastname;
         this.depositAmount = depositAmount;
@@ -68,8 +68,8 @@ public class Student {
      *
      * @return The username of the student.
      */
-    public String getUserName() {
-        return userName;
+    public int getUserId() {
+        return userId;
     }
 
     /**

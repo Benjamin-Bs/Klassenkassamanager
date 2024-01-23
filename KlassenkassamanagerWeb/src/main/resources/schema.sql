@@ -6,20 +6,20 @@ CREATE TABLE WebUser (
 
 CREATE TABLE Class (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    ownerName VARCHAR,
+    ownerId INT,
     department VARCHAR,
     dateOfFounding DATE,
-    FOREIGN KEY (ownerName) REFERENCES WebUser(userName)
+    FOREIGN KEY (ownerId) REFERENCES WebUser(id)
 );
 
 CREATE TABLE Student (
     id INT PRIMARY KEY AUTO_INCREMENT,
     classId INT,
-    userName VARCHAR,
+    userId INT,
     firstname VARCHAR,
     lastname VARCHAR,
     depositAmount FLOAT,
     toPayAmount FLOAT,
     FOREIGN KEY (classId) REFERENCES Class(id),
-    FOREIGN KEY (userName) REFERENCES WebUser(userName)
+    FOREIGN KEY (userId) REFERENCES WebUser(id)
 );

@@ -22,7 +22,7 @@ function MainPart() {
                 <button className={currentClass === activeClass ? "nav-link active" : "nav-link"} aria-current="page" onClick={() => setActiveClass(currentClass)}  style={{width: '100%'}}>
                     <svg className="bi me-2" width="16" height="16"><use xlinkHref="#home"></use></svg>
                     {currentClass.department}
-                    {currentClass.ownerName === sessionStorage.getItem("userName")?"[owner]":""}
+                    {Number(currentClass.ownerId) === Number(sessionStorage.getItem("userId"))?"[owner]":""}
                 </button>
             </li>
         ));

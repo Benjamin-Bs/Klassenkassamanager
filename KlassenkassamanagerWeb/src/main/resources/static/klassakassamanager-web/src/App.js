@@ -8,6 +8,7 @@ import MainPart from "./Components/MainPart";
 
 function App(){
     sessionStorage.setItem('userName', 'Tom');
+    sessionStorage.setItem('userId', 4);
     sessionStorage.setItem('password', '1234');
 
     return (

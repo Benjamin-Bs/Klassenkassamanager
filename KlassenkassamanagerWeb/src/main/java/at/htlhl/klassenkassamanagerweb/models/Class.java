@@ -15,7 +15,7 @@ public class Class {
     /**
      * The name of the owner of the class.
      */
-    private String ownerName;
+    private int ownerId;
 
     /**
      * The department to which the class belongs.
@@ -35,9 +35,9 @@ public class Class {
      * @param department      The department to which the class belongs.
      * @param dateOfFounding  The date when the class was founded.
      */
-    public Class(int id, String ownerName, String department, Date dateOfFounding) {
+    public Class(int id, int ownerId, String department, Date dateOfFounding) {
         this.id = id;
-        this.ownerName = ownerName;
+        this.ownerId = ownerId;
         this.department = department;
         this.dateOfFounding = dateOfFounding;
     }
@@ -65,8 +65,8 @@ public class Class {
      *
      * @return The owner's name of the class.
      */
-    public String getOwnerName() {
-        return ownerName;
+    public int getOwnerId() {
+        return ownerId;
     }
 
     /**

@@ -23,14 +23,14 @@ public class ClassRepository {
     private Class createClass(ResultSet rs) throws SQLException {
         return new Class(
                 rs.getInt("id"),
-                rs.getString("ownerName"),
+                rs.getInt("ownerId"),
                 rs.getString("department"),
                 rs.getDate("DateOfFounding")
         );
     }
 
     private void addClassToResultSet(PreparedStatement ps, Class classObject) throws SQLException {
-        ps.setString(1, classObject.getOwnerName());
+        ps.setInt(1, classObject.getOwnerId());
         ps.setString(2, classObject.getDepartment());
         ps.setDate(3, classObject.getDateOfFounding());
     }
@@ -41,20 +41,21 @@ public class ClassRepository {
 
     private static final String SELECT_CLASS_BY_USERNAME_SQL =
             """
-            SELECT Class.id AS id, ownerName, department, dateOfFounding  FROM Class 
-            JOIN Student 
-            ON Student.classId = Class.id
-            WHERE Student.userName = ?;
+            SELECT Class.id as id, ownerId, department, dateOfFounding 
+            FROM Class 
+            JOIN Student ON Class.id = Student.classId 
+            JOIN WebUser ON Student.userId = WebUser.id 
+            WHERE WebUser.userName = ?;
             """;
 
     private static final String INSERT_CLASS_SQL =
             "INSERT INTO Class " +
-                    "(ownerName, department, dateOfFounding) " +
+                    "(ownerId, department, dateOfFounding) " +
                     "VALUES (?, ?, ?)";
 
     private static final String UPDATE_CLASS_SQL =
             "UPDATE Class SET " +
-                    "ownerName = ?, department = ?, dateOfFounding = ? " +
+                    "ownerId = ?, department = ?, dateOfFounding = ? " +
                     "WHERE id = ?";
 
     private static final String DELETE_CLASS_SQL =

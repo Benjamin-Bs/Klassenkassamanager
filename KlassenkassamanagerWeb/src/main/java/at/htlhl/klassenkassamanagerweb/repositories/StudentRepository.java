@@ -24,7 +24,7 @@ public class StudentRepository {
     private Student createStudent(ResultSet rs) throws SQLException {
         return new Student(
                 rs.getInt("classId"),
-                rs.getString("userName"),
+                rs.getInt("userId"),
                 rs.getString("firstname"),
                 rs.getString("lastname"),
                 rs.getFloat("depositAmount"),
@@ -34,7 +34,7 @@ public class StudentRepository {
 
     private void addStudentToResultSet(PreparedStatement ps, Student student) throws SQLException {
         ps.setInt(1, student.getClassId());
-        ps.setString(2, student.getUserName());
+        ps.setInt(2, student.getUserId());
         ps.setString(3, student.getFirstname());
         ps.setString(4, student.getLastname());
         ps.setFloat(5, student.getDepositAmount());
