@@ -1,6 +1,6 @@
 // Importiere die React-Bibliothek und die benötigten Komponenten
-import React, { useEffect, useState } from 'react';
-import { GET } from '../apiUtility';
+import React, {useEffect, useState} from 'react';
+import {GET} from '../apiUtility';
 
 // Erstelle deine React-Komponente
 function StudentTable({activeClass}) {
@@ -30,7 +30,7 @@ function StudentTable({activeClass}) {
                     <th scope="col">Einzahlen</th>
                     <th scope="col">Bereits eingezahlt</th>
                     <th scope="col">Offener Betrag</th>
-                    <th scope="col"> </th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>{fillTable()}</tbody>
@@ -47,6 +47,7 @@ function StudentTable({activeClass}) {
                 <td>{student.toPayAmount}</td>
                 <td>{student.depositAmount}</td>
                 <td>{student.toPayAmount - student.depositAmount}</td>
+                {/*Font Awsome hinzufügen*/}
                 <td>{student.depositAmount >= student.toPayAmount ? "v" : "x"}</td>
             </tr>
         ));
@@ -55,7 +56,7 @@ function StudentTable({activeClass}) {
     // Gib die Tabelle zurück
     return (
         <div className="bd-example">
-            <div style={{ height: '5dvh'}}></div>
+            <div style={{height: '5dvh'}}></div>
             <div
                 data-bs-spy="scroll"
                 data-bs-target="#navbar-example2"
@@ -63,7 +64,7 @@ function StudentTable({activeClass}) {
                 data-bs-smooth-scroll="true"
                 className="scrollspy-example bg-body-tertiary p-3 rounded-2"
                 tabIndex="0"
-                style={{ maxHeight: '80dvh', overflowY: 'auto' }}
+                style={{maxHeight: '80dvh', overflowY: 'auto'}}
             >
                 {renderTable()}
             </div>
