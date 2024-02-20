@@ -1,6 +1,7 @@
 // Importiere die React-Bibliothek und die benötigten Komponenten
 import React, { useEffect, useState } from 'react';
 import { GET } from '../apiUtility';
+import EditBar from "./EditBar";
 
 // Erstelle deine React-Komponente
 function StudentTable({activeClass}) {
@@ -63,10 +64,11 @@ function StudentTable({activeClass}) {
                 data-bs-smooth-scroll="true"
                 className="scrollspy-example bg-body-tertiary p-3 rounded-2"
                 tabIndex="0"
-                style={{ maxHeight: '80dvh', overflowY: 'auto' }}
+                style={{ maxHeight: '75dvh', minHeight: '75dvh', overflowY: 'auto' }}
             >
                 {renderTable()}
             </div>
+            <EditBar/>
         </div>
     );
 }

@@ -31,7 +31,7 @@ public class Class {
      * Constructs a Class object with the specified parameters.
      *
      * @param id              The unique identifier for the class.
-     * @param ownerName       The name of the owner of the class.
+     * @param ownerId         The name of the owner of the class.
      * @param department      The department to which the class belongs.
      * @param dateOfFounding  The date when the class was founded.
      */

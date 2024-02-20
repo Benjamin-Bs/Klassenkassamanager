@@ -1,0 +1,46 @@
+
+STUDENT:
+Get: 
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/Student/3 -Method Get
+
+Post:
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/Class/2/Student -Method Post -Body 		'{"classId":2,"userName":"Bob","firstname":"Bob","lastname":"Bobleau","depositAmount":22.5,"toPayAmount":10.5}' -ContentType 'application/json'
+
+Patch: 
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/Student/3 -Method Patch -Body '{"classId":1,"userName":"Bob","firstname":"Bob","lastname":"Bobleau","depositAmount":22.5,"toPayAmount":10.5}' -ContentType 'application/json' 
+
+Delete: 
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/Student/3 -Method Delete
+
+
+
+
+CLASS:
+Get:
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/Class/2/Students -Method Get
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/Class/2/Properties -Method Get
+
+Post:
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/Class/ -Method Post -Body '{"id":1, "ownerName":"Bob", "department":"IT", "dateOfFounding":"2020-09-01"}' -ContentType 'application/json'
+
+Patch:
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/Class/1 -Method Patch -Body '{"id":1, "ownerName":"Bob", "department":"IT", "dateOfFounding":"2020-09-01"}' -ContentType 'application/json'
+
+Delete:
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/Class/1 -Method Delete
+
+
+
+
+USER:
+Get:
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/User/1 -Method Get
+
+Post:
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/User/ -Method Post -Body '{"username":"Gary", "password":"123"}' -ContentType 'application/json'
+
+Patch:
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/User/1 -Method Patch -Body '{"username":"Gary", "password":"123"}' -ContentType 'application/json'
+
+Delete:
+		Invoke-WebRequest -Uri http://localhost:8080/klassenkassa-manager/User/1 -Method Delete
