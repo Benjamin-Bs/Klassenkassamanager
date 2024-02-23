@@ -2,10 +2,10 @@
 
 ## React
 
-###Instalation
+### Instalation
 * npm install react-scripts --save 
 
-###Start
+### Start
 * cd {ProjectPath}/Gr02_Klassenkassamanager\KlassenkassamanagerWeb\src\main\resources\static\klassakassamanager-web> 
 * npm start
 

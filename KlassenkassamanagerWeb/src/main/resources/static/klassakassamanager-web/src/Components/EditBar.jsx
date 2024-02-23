@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+// Icon imports ***************************************************************
+import { FaUserPen } from "react-icons/fa6";
 
 function FunctionalButton({ text, onClick }) {
     return (

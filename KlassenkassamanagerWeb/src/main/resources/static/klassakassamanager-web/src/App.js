@@ -5,7 +5,8 @@ import Sidebar from './Components/MainPart';
 import StudentTable from "./Components/StudentTable";
 import Navbar from "./Components/Navbar";
 import MainPart from "./Components/MainPart";
-import Profile from "./Account/Account";
+import Profile from "./Components/Account/Account";
+import Login from "./Components/Login/Login";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 function App() {
@@ -21,8 +22,9 @@ function App() {
                 </div>
                 <div className="row" style={{height: '90dvh', width: '100%'}}>
                     <Switch>
+                        <Route path="/" component={Login}/>
                         <Route path="/profile" component={Profile} /> {/* Route für das Profil */}
-                        <Route path="/" component={MainPart} /> {/* Standard-Route */}
+                        <Route path="/home" component={MainPart} /> {/* Standard-Route */}
                     </Switch>
                 </div>
             </div>
