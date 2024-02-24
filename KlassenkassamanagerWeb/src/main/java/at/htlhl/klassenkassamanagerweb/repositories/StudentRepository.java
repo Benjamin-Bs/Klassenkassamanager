@@ -32,6 +32,18 @@ public class StudentRepository {
         );
     }
 
+    private Student createStudentWithId(ResultSet rs) throws SQLException {
+        return new Student(
+                rs.getInt("id"),
+                rs.getInt("classId"),
+                rs.getInt("userId"),
+                rs.getString("firstname"),
+                rs.getString("lastname"),
+                rs.getFloat("depositAmount"),
+                rs.getFloat("toPayAmount")
+        );
+    }
+
     private void addStudentToResultSet(PreparedStatement ps, Student student) throws SQLException {
         ps.setInt(1, student.getClassId());
         ps.setInt(2, student.getUserId());
@@ -41,13 +53,23 @@ public class StudentRepository {
         ps.setFloat(6, student.getToPayAmount());
     }
 
+    private void addStudentToResultSetWithId(PreparedStatement ps, Student student) throws SQLException {
+        ps.setInt(1, student.getId());
+        ps.setInt(2, student.getClassId());
+        ps.setInt(3, student.getUserId());
+        ps.setString(4, student.getFirstname());
+        ps.setString(5, student.getLastname());
+        ps.setFloat(6, student.getDepositAmount());
+        ps.setFloat(7, student.getToPayAmount());
+    }
+
     private static final String SELECT_STUDENT_SQL =
             "SELECT * FROM Student " +
             "WHERE id = ?;";
 
     private static final String INSERT_STUDENT_SQL =
             "INSERT INTO Student " +
-            "(classId, userName, firstname, lastname, depositAmount, toPayAmount) " +
+            "(classId, userId, firstname, lastname, depositAmount, toPayAmount) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
 
     private static final String UPDATE_STUDENT_SQL =
@@ -87,7 +109,7 @@ public class StudentRepository {
 
         ArrayList<Student> students = new ArrayList<>();
         while (rs.next()) {
-            students.add(createStudent(rs));
+            students.add(createStudentWithId(rs));
         }
         LOGGER.info("Selected Students: " + students);
         return students;

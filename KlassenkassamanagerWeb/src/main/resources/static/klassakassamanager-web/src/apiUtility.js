@@ -29,8 +29,8 @@ export const DELETE = async (url) => {
         const response = await fetch(url, {
             method: 'DELETE',
         });
-        const responseData = await response.json();
-        return responseData;
+        //const responseData = await response.json();
+        //return responseData;
     } catch (error) {
         console.error('Error while making DELETE request:', error);
         throw error;
@@ -45,8 +45,8 @@ export const POST = async (url, data) => {
             },
             body: JSON.stringify(data),
         });
-        const responseData = await response.json();
-        return responseData;
+        //const responseData = await response.json();
+        //return responseData;
     } catch (error) {
         console.error('Error while making POST request:', error);
         throw error;

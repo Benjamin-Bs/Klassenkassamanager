@@ -8,6 +8,7 @@ public class Student {
     /**
      * The identifier of the class to which the student belongs.
      */
+    private int id;
     private int classId;
 
     /**
@@ -35,11 +36,15 @@ public class Student {
      */
     private float toPayAmount;
 
+    public Student(){
+
+    }
+
     /**
      * Constructs a Student object with the specified parameters.
      *
      * @param classId       The identifier of the class to which the student belongs.
-     * @param userName      The username of the student.
+     * @param userId      The username of the student.
      * @param firstname     The first name of the student.
      * @param lastname      The last name of the student.
      * @param depositAmount The amount of deposit money the student has.
@@ -53,12 +58,25 @@ public class Student {
         this.depositAmount = depositAmount;
         this.toPayAmount = toPayAmount;
     }
+    public Student(int id, int classId, int userId, String firstname, String lastname, float depositAmount, float toPayAmount) {
+        this.id = id;
+        this.classId = classId;
+        this.userId = userId;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.depositAmount = depositAmount;
+        this.toPayAmount = toPayAmount;
+    }
 
     /**
      * Retrieves the identifier of the class to which the student belongs.
      *
      * @return The class identifier.
      */
+    public int getId() {
+        return id;
+    }
+
     public int getClassId() {
         return classId;
     }

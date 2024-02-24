@@ -41,40 +41,44 @@ function StudentTable({ activeClass }) {
     };
 
     const fillTable = () => {
-        return students.map((student, index) => (
+
+        return students.map((student, index) => {
+            const background = selectedStudent === student ? "bg-secondary" : "";
+            return (
             <tr key={index} onClick={() => handleStudentClick(student)}> {/* Event-Handler für Klick auf Schüler hinzugefügt */}
-                <th scope="row">{index + 1}</th>
-                <td>{student.firstname}</td>
-                <td>{student.lastname}</td>
-                <td>{student.toPayAmount}</td>
-                <td>{student.depositAmount}</td>
-                <td>{student.toPayAmount - student.depositAmount}</td>
+                <th className={background} scope="row">{index + 1}</th>
+                <td className={background}>{student.firstname}</td>
+                <td className={background}>{student.lastname}</td>
+                <td className={background}>{student.toPayAmount}</td>
+                <td className={background}>{student.depositAmount}</td>
+                <td className={background}>{student.toPayAmount - student.depositAmount}</td>
                 {/*Font Awesome hinzufügen*/}
-                <td>{student.depositAmount >= student.toPayAmount ? "v" : "x"}</td>
-            </tr>
-        ));
+                <td className={background}>{student.depositAmount >= student.toPayAmount ? "v" : "x"}</td>
+            </tr>)
+        });
     };
 
     // Event-Handler für Klick auf Schüler
     const handleStudentClick = (student) => {
         setSelectedStudent(student); // Setze den ausgewählten Schüler
+        console.log(student)
     };
 
     // Funktion zum Hinzufügen eines neuen Schülers
-    const addStudent = async () => {
+    const addStudent = async (activeClass) => {
+        console.log(activeClass)
         // Annahme: 'activeClass.id' ist die aktive Klassen-ID
-        const newStudentData = { firstname: 'Neuer', lastname: 'Schüler', toPayAmount: 0, depositAmount: 0 };
-        await POST(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`, newStudentData);
+        const newStudentData = {classId: -1, userId: 1, firstname: 'Neuer', lastname: 'Schüler', toPayAmount: 0, depositAmount: 0 };
+        await POST(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Student`, newStudentData);
         // Neu laden der Schülerdaten
-        const updatedStudentsData = await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`);
-        setStudents(updatedStudentsData);
+        setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
     };
 
     // Funktion zum Löschen eines Schülers
     const deleteStudent = async () => {
         if (selectedStudent) {
             // Annahme: 'selectedStudent.id' ist die ID des ausgewählten Schülers
-            await DELETE(`http://localhost:8080/klassenkassa-manager/Students/${selectedStudent.id}`);
+            await DELETE(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}`);
             // Neu laden der Schülerdaten
             const updatedStudentsData = await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`);
             setStudents(updatedStudentsData);
@@ -98,7 +102,7 @@ function StudentTable({ activeClass }) {
                 {renderTable()}
             </div>
             <EditBar
-                onAddStudent={addStudent} // Weitergabe der Funktion zum Hinzufügen eines Schülers
+                onAddStudent={(() => addStudent(activeClass))} // Weitergabe der Funktion zum Hinzufügen eines Schülers
                 onDeleteStudent={deleteStudent} // Weitergabe der Funktion zum Löschen eines Schülers
                 isStudentSelected={selectedStudent !== null} // Weitergabe, ob ein Schüler ausgewählt ist
             />

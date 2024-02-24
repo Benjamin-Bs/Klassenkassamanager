@@ -11,6 +11,7 @@ function MainPart() {
         const fetchData = async () => {
             const classData = await GET(`http://localhost:8080/klassenkassa-manager/User/${sessionStorage.getItem("userName")}/Classes`);
             setClasses(classData);
+            setActiveClass(classData[0])
         };
 
         fetchData();

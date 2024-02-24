@@ -1,3 +1,4 @@
+INSERT INTO WebUser(userName, password) VALUES ('Default', 'Default');
 INSERT INTO WebUser(userName, password) VALUES ('Bob', '123');
 INSERT INTO WebUser(userName, password) VALUES ('Puzzles', 'password');
 INSERT INTO WebUser(userName, password) VALUES ('Dave', 'abc');
