@@ -43,11 +43,34 @@ public class StudentsController {
      * @return Student object representing the edited student.
      * @throws SQLException if there is a database access error.
      */
-    @PatchMapping(value = "/{id}", consumes = "application/json")
+
+    /** depricated (might be to risky) */
+    /*@PatchMapping(value = "/{id}", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Edit a Students by id")
     public Student editStudentById(@PathVariable int id, @RequestBody Student student) throws SQLException {
         return studentRepository.updateStudent(id, student);
+    }*/
+
+    @PatchMapping(value = "/{id}/debt", consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Edit a Students by id")
+    public void increaseDebtById(@PathVariable int id, @RequestBody float increaseDebtValue) throws SQLException {
+        studentRepository.increaseDebt(id, increaseDebtValue);
+    }
+
+    @PatchMapping(value = "/{id}/depositValue", consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Edit a Students by id")
+    public void depositById(@PathVariable int id, @RequestBody float depositValue) throws SQLException {
+        studentRepository.deposit(id, depositValue);
+    }
+
+    @PatchMapping(value = "/{id}/name", consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Edit a Students by id")
+    public void changeNameById(@PathVariable int id, @RequestBody Student.Name name) throws SQLException {
+        studentRepository.updateName(id, name);
     }
 
     /**

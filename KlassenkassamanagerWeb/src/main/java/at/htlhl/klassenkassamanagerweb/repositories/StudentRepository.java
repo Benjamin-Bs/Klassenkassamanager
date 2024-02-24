@@ -72,10 +72,26 @@ public class StudentRepository {
             "(classId, userId, firstname, lastname, depositAmount, toPayAmount) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
 
-    private static final String UPDATE_STUDENT_SQL =
+
+    /*private static final String UPDATE_STUDENT_SQL =
             "UPDATE Student SET " +
             "classId = ?, userName = ?, firstname = ?, lastname = ?, depositAmount = ?, toPayAmount = ? " +
-            "WHERE id = ?";
+            "WHERE id = ?";*/
+
+    private static final String UPDATE_DEBT_SQL =
+            "UPDATE Student SET " +
+                    "toPayAmount = ?" +
+                    "WHERE id = ?";
+
+    private static final String UPDATE_DEPOSIT_AMOUNT_SQL =
+            "UPDATE Student SET " +
+                    "depositAmount = ?" +
+                    "WHERE id = ?";
+
+    private static final String UPDATE_NAME_SQL =
+            "UPDATE Student SET " +
+                    "firstname = ?, lastname = ?" +
+                    "WHERE id = ?";
 
     private static final String DELETE_STUDENT_SQL =
             "DELETE FROM Student " +
@@ -138,7 +154,8 @@ public class StudentRepository {
         }
     }
 
-    public Student updateStudent(int id, Student student) throws SQLException {
+    /** depricated (might be to risky) */
+    /*public Student updateStudent(int id, Student student) throws SQLException {
         try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(UPDATE_STUDENT_SQL)) {
             addStudentToResultSet(ps, student);
             ps.setFloat(7, id);
@@ -149,6 +166,55 @@ public class StudentRepository {
                 LOGGER.info("Student with ID {} updated successfully", id);
                 // Optionally, you can return the updated student
                 return student;
+            } else {
+                throw new SQLException("Student with ID " + id + " not found or could not be updated");
+            }
+        }
+    }*/
+
+    public void increaseDebt(int id, float debtValue) throws SQLException {
+        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(UPDATE_DEBT_SQL)) {
+            ps.setFloat(1, debtValue);
+            ps.setFloat(2, id);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                LOGGER.info("Student with ID {} updated successfully", id);
+                // Optionally, you can return the updated student
+            } else {
+                throw new SQLException("Student with ID " + id + " not found or could not be updated");
+            }
+        }
+    }
+
+    public void deposit(int id, float depositValue) throws SQLException {
+        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(UPDATE_DEPOSIT_AMOUNT_SQL)) {
+            ps.setFloat(1, depositValue);
+            ps.setFloat(2, id);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                LOGGER.info("Student with ID {} updated successfully", id);
+                // Optionally, you can return the updated student
+            } else {
+                throw new SQLException("Student with ID " + id + " not found or could not be updated");
+            }
+        }
+    }
+
+    public void updateName(int id, Student.Name name) throws SQLException {
+        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(UPDATE_NAME_SQL)) {
+            ps.setString(1, name.getFirstname());
+            ps.setString(2, name.getLastname());
+            ps.setFloat(3, id);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                LOGGER.info("Student with ID {} updated successfully", id);
+                // Optionally, you can return the updated student
             } else {
                 throw new SQLException("Student with ID " + id + " not found or could not be updated");
             }

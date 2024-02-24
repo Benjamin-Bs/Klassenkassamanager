@@ -6,7 +6,8 @@ import EditBar from "./EditBar";
 // Erstelle deine React-Komponente
 function StudentTable({ activeClass }) {
     const [students, setStudents] = useState([]);
-    const [selectedStudent, setSelectedStudent] = useState(null); // Hinzufügen einer State-Variable für ausgewählten Schüler
+    const [selectedStudents, setSelectedStudents] = useState([]);
+    const [startingIndex, setStartingIndex] = useState(null);
 
     // Rufe die Funktion 'getStudentsFromClass' auf, um die Schülerdaten zu erhalten
     useEffect(() => {
@@ -43,9 +44,9 @@ function StudentTable({ activeClass }) {
     const fillTable = () => {
 
         return students.map((student, index) => {
-            const background = selectedStudent === student ? "bg-secondary" : "";
+            const background = selectedStudents.includes(student) ? "bg-secondary" : "";
             return (
-            <tr key={index} onClick={() => handleStudentClick(student)}> {/* Event-Handler für Klick auf Schüler hinzugefügt */}
+            <tr key={index} onMouseDown={() => mouseDown(index)} onMouseUp={() => mouseUp(index)}>
                 <th className={background} scope="row">{index + 1}</th>
                 <td className={background}>{student.firstname}</td>
                 <td className={background}>{student.lastname}</td>
@@ -58,11 +59,19 @@ function StudentTable({ activeClass }) {
         });
     };
 
-    // Event-Handler für Klick auf Schüler
-    const handleStudentClick = (student) => {
-        setSelectedStudent(student); // Setze den ausgewählten Schüler
-        console.log(student)
+    const mouseDown = (selectedIndex) => {
+        setStartingIndex(selectedIndex); // Setze den ausgewählten Schüler
+        //console.log(student)
     };
+    const mouseUp = (selectedIndex) => {
+        const firstIndex = Math.min(startingIndex, selectedIndex);
+        const lastIndex = Math.max(startingIndex, selectedIndex);
+
+        const newStudents = students.filter((student, index) => (firstIndex <= index && index <= lastIndex));
+        console.log(newStudents)
+        setSelectedStudents(newStudents);
+    };
+
 
     // Funktion zum Hinzufügen eines neuen Schülers
     const addStudent = async (activeClass) => {
@@ -76,13 +85,15 @@ function StudentTable({ activeClass }) {
 
     // Funktion zum Löschen eines Schülers
     const deleteStudent = async () => {
-        if (selectedStudent) {
-            // Annahme: 'selectedStudent.id' ist die ID des ausgewählten Schülers
-            await DELETE(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}`);
-            // Neu laden der Schülerdaten
-            const updatedStudentsData = await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`);
-            setStudents(updatedStudentsData);
-            setSelectedStudent(null); // Zurücksetzen des ausgewählten Schülers nach dem Löschen
+        if (selectedStudents.length !== 0) {
+            for (const selectedStudent of selectedStudents) {
+                // Annahme: 'selectedStudent.id' ist die ID des ausgewählten Schülers
+                await DELETE(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}`);
+                // Neu laden der Schülerdaten
+                const updatedStudentsData = await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`);
+                setStudents(updatedStudentsData);
+                setSelectedStudents([]); // Zurücksetzen des ausgewählten Schülers nach dem Löschen
+            }
         }
     };
 
@@ -104,7 +115,7 @@ function StudentTable({ activeClass }) {
             <EditBar
                 onAddStudent={(() => addStudent(activeClass))} // Weitergabe der Funktion zum Hinzufügen eines Schülers
                 onDeleteStudent={deleteStudent} // Weitergabe der Funktion zum Löschen eines Schülers
-                isStudentSelected={selectedStudent !== null} // Weitergabe, ob ein Schüler ausgewählt ist
+                studentsSelected={selectedStudents.length} // Weitergabe, ob ein Schüler ausgewählt ist
             />
         </div>
     );
