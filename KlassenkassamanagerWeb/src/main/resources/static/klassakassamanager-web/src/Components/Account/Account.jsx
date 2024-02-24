@@ -1,7 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {GET} from "../../apiUtility";
 
 function Account() {
+
+    const [file, setFile] = useState();
+    function handleChange(e) {
+        console.log(e.target.files);
+        setFile(URL.createObjectURL(e.target.files[0]));
+    }
+
     return (
         <div className="container">
             <h1>Your Account</h1>
@@ -20,6 +27,12 @@ function Account() {
                         <td>boblioooo@gmail.com</td>
                     </tr>
                 </table>
+
+                <div>
+                    <h2>Add Image:</h2>
+                    <input type="file" onChange={handleChange}/>
+                    <img src={file}/>
+                </div>
             </div>
         </div>
     );

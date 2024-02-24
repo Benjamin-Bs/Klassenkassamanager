@@ -34,11 +34,11 @@ function Login() {
                     <label><input type="checkbox"/> Remember me</label>
                     <a href="#">Forgot password?</a>
                 </div>
-                
+                <Link to="/home">
                     <button type="submit">Login</button>
-
+                </Link>
                 <div>
-                    <p>Don't have an account? <a href="">Register</a></p>
+                    <p>Don't have an account? <Link to="/register">Register</Link></p>
                 </div>
 
             </form>

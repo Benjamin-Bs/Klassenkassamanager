@@ -15,7 +15,7 @@ function User(){
                 <li>
                     <hr className="dropdown-divider"/>
                 </li>
-                <li><a className="dropdown-item" href="#">Sign out</a></li>
+                <li><Link className="dropdown-item" to="/login">Sign out</Link></li>
             </ul>
         </div>
     );
