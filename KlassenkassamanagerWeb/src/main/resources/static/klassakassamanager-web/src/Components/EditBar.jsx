@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-// Icon imports ***************************************************************
-import { FaUserPen } from "react-icons/fa6";
 
-function FunctionalButton({ text, onClick }) {
+function FunctionalButton({ text, onClick, disabled }) {
     return (
-        <button className={"btn btn-primary"} style={{width: '100%'}} onClick={onClick}>
+        <button className={"btn btn-primary"} style={{ width: '100%' }} onClick={onClick} disabled={disabled}>
             {text}
         </button>
     )
@@ -32,7 +30,7 @@ function ConfirmationModal({ isOpen, message, onCancel, onConfirm }) {
     )
 }
 
-function EditBar() {
+function EditBar({ onAddStudent, onDeleteStudent, isStudentSelected }) {
     const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
     const [confirmationMessage, setConfirmationMessage] = useState("");
     const [buttonText, setButtonText] = useState("");
@@ -44,8 +42,11 @@ function EditBar() {
     };
 
     const handleConfirm = () => {
-        // Perform action based on the button clicked
-        console.log(`Confirmed ${buttonText}`);
+        if (buttonText === "Add Student") {
+            onAddStudent();
+        } else if (buttonText === "Delete" && isStudentSelected) {
+            onDeleteStudent();
+        }
         setIsConfirmationOpen(false);
     };
 
@@ -60,16 +61,16 @@ function EditBar() {
                 <FunctionalButton text={"Add Student"} onClick={() => handleButtonClick("Add Student")} />
             </div>
             <div className={"col-2"}>
-                <FunctionalButton text={"Edit Student"} onClick={() => handleButtonClick("Edit Student")} />
+                <FunctionalButton text={"Edit Student"} onClick={() => handleButtonClick("Edit Student")} disabled={!isStudentSelected} />
             </div>
             <div className={"col-2"}>
-                <FunctionalButton text={"Increase Debt"} onClick={() => handleButtonClick("Increase Debt")} />
+                <FunctionalButton text={"Increase Debt"} onClick={() => handleButtonClick("Increase Debt")} disabled={!isStudentSelected} />
             </div>
             <div className={"col-2"}>
-                <FunctionalButton text={"Deposit"} onClick={() => handleButtonClick("Deposit")} />
+                <FunctionalButton text={"Deposit"} onClick={() => handleButtonClick("Deposit")} disabled={!isStudentSelected} />
             </div>
             <div className={"col-2"}>
-                <FunctionalButton text={"Delete"} onClick={() => handleButtonClick("Delete")} />
+                <FunctionalButton text={"Delete"} onClick={() => handleButtonClick("Delete")} disabled={!isStudentSelected} />
             </div>
             <ConfirmationModal
                 isOpen={isConfirmationOpen}

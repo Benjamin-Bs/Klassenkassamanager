@@ -1,46 +1,6 @@
-/*const API_BASE_URL = 'http://localhost:8080/api'; // Deine Backend-URL hier
-
-export const fetchData = async (endpoint) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/${endpoint}`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        throw error;
-    }
-};*/
-
 
 async function GET(apiUrl) {
 
-    /*const students = [
-        {
-            studentID: 5,
-            firstname: "Bob",
-            lastname: "Boblio",
-            toPayAmount: 25,
-            depositAmount: 30
-        },
-        {
-            studentID: 2,
-            firstname: "Puzzles",
-            lastname: "00Z",
-            toPayAmount: 224,
-            depositAmount: 650
-        },
-        {
-            studentID: 69,
-            firstname: "Lazlo",
-            lastname: "Cravensworth",
-            toPayAmount: 453,
-            depositAmount: 850
-        }
-    ];
-
-    return students;*/
     return fetch(apiUrl)
         .then(response => {
             if (!response.ok) {
@@ -62,3 +22,33 @@ async function GET(apiUrl) {
 }
 
 export {GET};
+
+
+export const DELETE = async (url) => {
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+        });
+        const responseData = await response.json();
+        return responseData;
+    } catch (error) {
+        console.error('Error while making DELETE request:', error);
+        throw error;
+    }
+};
+export const POST = async (url, data) => {
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        const responseData = await response.json();
+        return responseData;
+    } catch (error) {
+        console.error('Error while making POST request:', error);
+        throw error;
+    }
+};
