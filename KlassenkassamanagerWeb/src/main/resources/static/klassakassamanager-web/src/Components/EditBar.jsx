@@ -1,130 +1,197 @@
 import React, { useState } from "react";
-import {DELETE, GET, POST} from "../apiUtility";
+import {GET, POST, PATCH, DELETE} from "../apiUtility";
 
-function FunctionalButton({ text, onClick, disabled }) {
+function FunctionalButton({ modalId, text, onClick, disabled }) {
     return (
-        <button className={"btn btn-primary"} style={{ width: '100%' }} onClick={onClick} disabled={disabled} type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button className={"btn btn-primary"} style={{ width: '100%' }} onClick={onClick} disabled={disabled} type="button" data-bs-toggle="modal" data-bs-target={"#"+modalId}>
             {text}
         </button>
     )
 }
 
-function AddButton() {
-    /*const addStudent = async (activeClass) => {
-        console.log(activeClass)
-        // Annahme: 'activeClass.id' ist die aktive Klassen-ID
-        const newStudentData = {classId: -1, userId: 1, firstname: 'Neuer', lastname: 'Schüler', toPayAmount: 0, depositAmount: 0 };
-        await POST(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Student`, newStudentData);
-        // Neu laden der Schülerdaten
-        setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
-    };*/
+let setStudents;
+let setSelectedStudents;
+let activeClass;
+
+function ConfirmationModal({id, inputs, handleConfirm, title}) {
+
 
     return (
-        <FunctionalButton text={"Add Student"}/>
-    )
-}
-
-function EditButton() {
-    return (
-        <FunctionalButton text={"Edit Student"}/>
-    )
-}
-
-function IncreaseDebtButton() {
-    return (
-        <FunctionalButton text={"Increase Debt"}/>
-    )
-}
-
-function DepositButton() {
-    return (
-        <FunctionalButton text={"Deposit"}/>
-    )
-}
-
-function DeleteButton() {
-    // Funktion zum Löschen eines Schülers
-    /*const deleteStudent = async () => {
-        if (selectedStudents.length !== 0) {
-            for (const selectedStudent of selectedStudents) {
-                // Annahme: 'selectedStudent.id' ist die ID des ausgewählten Schülers
-                await DELETE(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}`);
-                // Neu laden der Schülerdaten
-                const updatedStudentsData = await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`);
-                setStudents(updatedStudentsData);
-                setSelectedStudents([]); // Zurücksetzen des ausgewählten Schülers nach dem Löschen
-            }
-        }
-    };*/
-
-    return (
-        <FunctionalButton text={"Delete"}/>
-    )
-}
-
-function ConfirmationModal({ message, onConfirm }) {
-    return (
-        <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
+        <div className="modal fade" id={id} tabIndex="-1" aria-labelledby={id+"Label"}
              aria-hidden="true">
             <div className="modal-dialog">
                 <div className="modal-content">
-                    <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="exampleModalLabel">Confirmation</h1>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div className="modal-body">
-                        {message}
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={onConfirm}>Confirm</button>
-                        <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    </div>
+                    <form method={"post"} onSubmit={(event) => {event.preventDefault(); setSelectedStudents([]); handleConfirm(new FormData(event.target))}}>
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id={id+"Label"}>{title}</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            {inputs && inputs.map((input, index) => (
+                                <div key={index}>
+                                    {input}
+                                    <br/>
+                                    <br/>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-primary" data-bs-dismiss="modal" type={"submit"}>Confirm</button>
+                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     )
 }
 
-function EditBar({ onAddStudent, onDeleteStudent, studentsSelected }) {
-    const [confirmationMessage, setConfirmationMessage] = useState("");
-    const [buttonText, setButtonText] = useState("");
-
-    const handleButtonClick = (text) => {
-        setButtonText(text);
-        setConfirmationMessage(`Are you sure you want to ${text.toLowerCase()}?`);
+function AddButton() {
+    const addStudent = async (data) => {
+        const username = data.get('username');
+        console.log(activeClass)
+        const newStudentData = {classId: -1, userId: 1, firstname: data.get('firstname'), lastname: data.get('lastname'), toPayAmount: 0, depositAmount: 0 };
+        await POST(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Student`, newStudentData);
+        setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
     };
 
-    const handleConfirm = () => {
-        if (buttonText === "Add Student") {
-            onAddStudent();
-        } else if (buttonText === "Delete" && studentsSelected > 0) {
-            onDeleteStudent();
+    const content = (
+        [
+            <input type={"text"} name={"firstname"} placeholder={"Firstname"}/>,
+            <input type={"text"} name={"lastname"} placeholder={"Lastname"}/>,
+            <input type={"text"} name={"username"} placeholder={"Username[Optional]"}/>
+        ]
+    )
+
+    return (
+        <>
+            <FunctionalButton modalId={"addModal"} text={"Add Student"}/>
+            <ConfirmationModal id={"addModal"} title={"Add Student"} inputs={content} handleConfirm={(data) => {addStudent(data)}}/>
+        </>
+    )
+}
+
+function ChangeNameButton({selectedStudents}) {
+    const editStudent = async (data) => {
+        console.log(activeClass)
+        const newName = {firstname: data.get('firstname'), lastname: data.get('lastname')};
+        console.log(newName)
+        await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudents[0].id}/name`, newName);
+        setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
+    };
+
+    const content = (
+        [
+            <input type={"text"} name={"firstname"} placeholder={"Firstname"}/>,
+            <input type={"text"} name={"lastname"} placeholder={"Lastname"}/>,
+            <input type={"text"} name={"username"} placeholder={"Username[Optional]"}/>
+        ]
+    )
+
+    return (
+        <>
+            <FunctionalButton modalId={"changeModal"} text={"Edit Student"} disabled={selectedStudents.length !== 1}/>
+            <ConfirmationModal id={"changeModal"} title={"Edit Student"} inputs={content} handleConfirm={(data) => editStudent(data)} />
+        </>
+
+    )
+}
+
+function IncreaseDebtButton({selectedStudents}) {
+    const increaseDebt = async (data) => {
+        console.log(activeClass)
+        for (const selectedStudent of selectedStudents) {
+            await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}/debt`, parseFloat(data.get('debt')));
+            setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
         }
     };
 
+    const content = (
+        [
+            <input type={"number"} name={"debt"} placeholder={"Debt"} min="0"/>,
+        ]
+    )
+
+    return (
+        <>
+            <FunctionalButton modalId={"debtModal"} text={"Increase Debt"} disabled={selectedStudents.length <= 0}/>
+            <ConfirmationModal id={"debtModal"} title={"Increase Debt"} inputs={content} handleConfirm={(data) => increaseDebt(data)} />
+        </>
+    )
+}
+
+function DepositButton({selectedStudents}) {
+    const deposit = async (data) => {
+        console.log(activeClass)
+        for (const selectedStudent of selectedStudents) {
+            await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}/depositValue`, parseFloat(data.get('depositValue')));
+            setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
+        }
+    };
+
+    const content = (
+        [
+            <input type={"number"} name={"depositValue"} placeholder={"Deposit-Amount"} min="0"/>,
+        ]
+    )
+
+    return (
+        <>
+            <FunctionalButton modalId={"depositModal"} text={"Deposit"} disabled={selectedStudents.length <= 0}/>
+            <ConfirmationModal id={"depositModal"} title={"Deposit"} inputs={content} handleConfirm={(data) => deposit(data)} />
+        </>
+    )
+}
+
+function DeleteButton({selectedStudents}) {
+    console.log(selectedStudents)
+    const deleteStudents = async (data) => {
+        for (const selectedStudent of selectedStudents) {
+            await DELETE(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}`);
+            setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
+        }
+    };
+
+    const content = (
+        [
+        <div>
+            Are you sure you want to delete {selectedStudents.length} Students?
+        </div>
+        ]
+    )
+
+    return (
+        <>
+            <FunctionalButton modalId={"deleteModal"} text={"Delete"} disabled={selectedStudents.length <= 0}/>
+            <ConfirmationModal id={"deleteModal"} title={"Delete"} inputs={content} handleConfirm={(data) => deleteStudents(data)}/>
+        </>
+    )
+}
+
+
+function EditBar({selectedStudents, activeClassBinding, setStudentsBinding, setSelectedStudentsBinding}) {
+    setStudents = setStudentsBinding;
+    setSelectedStudents = setSelectedStudentsBinding;
+    activeClass = activeClassBinding;
 
     return (
         <div className={"row"}>
             <div className={"col-1"}></div>
             <div className={"col-2"}>
-                <FunctionalButton text={"Add Student"} onClick={() => handleButtonClick("Add Student")} />
+                <AddButton />
             </div>
             <div className={"col-2"}>
-                <FunctionalButton text={"Edit Student"} onClick={() => handleButtonClick("Edit Student")} disabled={studentsSelected !== 1} />
+                <ChangeNameButton selectedStudents={selectedStudents}/>
             </div>
             <div className={"col-2"}>
-                <FunctionalButton text={"Increase Debt"} onClick={() => handleButtonClick("Increase Debt")} disabled={studentsSelected <= 0} />
+                <IncreaseDebtButton selectedStudents={selectedStudents}/>
             </div>
             <div className={"col-2"}>
-                <FunctionalButton text={"Deposit"} onClick={() => handleButtonClick("Deposit")} disabled={studentsSelected <= 0} />
+                <DepositButton selectedStudents={selectedStudents}/>
             </div>
             <div className={"col-2"}>
-                <FunctionalButton text={"Delete"} onClick={() => handleButtonClick("Delete")} disabled={studentsSelected <= 0} />
+                <DeleteButton selectedStudents={selectedStudents} />
             </div>
-            <ConfirmationModal
-                message={confirmationMessage}
-                onConfirm={handleConfirm}
-            />
         </div>
     )
 }
