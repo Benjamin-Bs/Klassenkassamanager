@@ -97,6 +97,14 @@ public class UserController {
         userRepository.deleteUserById(id);
     }
 
+
+    @GetMapping(value = "/isvalid")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Valid the Login information")
+    public void isLoginValid(){
+
+    }
+
     /**
      * Sets the StudentRepository for the controller.
      *
@@ -121,6 +129,7 @@ public class UserController {
     public void setUserRepository(UserRepository userRepository){
         this.userRepository = userRepository;
     }
+
 
 }
 

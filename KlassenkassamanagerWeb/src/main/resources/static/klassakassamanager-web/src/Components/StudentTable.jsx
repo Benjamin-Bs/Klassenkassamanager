@@ -1,10 +1,10 @@
 // Importiere die React-Bibliothek und die benötigten Komponenten
-import React, { useEffect, useState } from 'react';
-import { GET, DELETE, POST } from '../apiUtility'; // Annahme: DELETE und POST sind für API-Anfragen
+import React, {useEffect, useState} from 'react';
+import {GET, DELETE, POST} from '../apiUtility'; // Annahme: DELETE und POST sind für API-Anfragen
 import EditBar from "./EditBar";
 
 // Erstelle deine React-Komponente
-function StudentTable({ activeClass }) {
+function StudentTable({activeClass}) {
     const [students, setStudents] = useState([]);
     const [selectedStudents, setSelectedStudents] = useState([]);
     const [startingIndex, setStartingIndex] = useState(null);
@@ -12,7 +12,7 @@ function StudentTable({ activeClass }) {
     // Rufe die Funktion 'getStudentsFromClass' auf, um die Schülerdaten zu erhalten
     useEffect(() => {
         const fetchData = async () => {
-            if (activeClass.id !== undefined) {
+            if (activeClass && activeClass.id !== undefined) {
                 const studentsData = await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`);
                 setStudents(studentsData);
             }
@@ -33,7 +33,7 @@ function StudentTable({ activeClass }) {
                     <th scope="col">Einzahlen</th>
                     <th scope="col">Bereits eingezahlt</th>
                     <th scope="col">Offener Betrag</th>
-                    <th scope="col"> </th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>{fillTable()}</tbody>
@@ -46,16 +46,16 @@ function StudentTable({ activeClass }) {
         return students.map((student, index) => {
             const background = selectedStudents.includes(student) ? "bg-secondary" : "";
             return (
-            <tr key={index} onMouseDown={() => mouseDown(index)} onMouseUp={() => mouseUp(index)}>
-                <th className={background} scope="row">{index + 1}</th>
-                <td className={background}>{student.firstname}</td>
-                <td className={background}>{student.lastname}</td>
-                <td className={background}>{student.toPayAmount}</td>
-                <td className={background}>{student.depositAmount}</td>
-                <td className={background}>{student.toPayAmount - student.depositAmount}</td>
-                {/*Font Awesome hinzufügen*/}
-                <td className={background}>{student.depositAmount >= student.toPayAmount ? "v" : "x"}</td>
-            </tr>)
+                <tr key={index} onMouseDown={() => mouseDown(index)} onMouseUp={() => mouseUp(index)}>
+                    <th className={background} scope="row">{index + 1}</th>
+                    <td className={background}>{student.firstname}</td>
+                    <td className={background}>{student.lastname}</td>
+                    <td className={background}>{student.toPayAmount}</td>
+                    <td className={background}>{student.depositAmount}</td>
+                    <td className={background}>{student.toPayAmount - student.depositAmount}</td>
+                    {/*Font Awesome hinzufügen*/}
+                    <td className={background}>{student.depositAmount >= student.toPayAmount ? "v" : "x"}</td>
+                </tr>)
         });
     };
 
@@ -77,7 +77,14 @@ function StudentTable({ activeClass }) {
     const addStudent = async (activeClass) => {
         console.log(activeClass)
         // Annahme: 'activeClass.id' ist die aktive Klassen-ID
-        const newStudentData = {classId: -1, userId: 1, firstname: 'Neuer', lastname: 'Schüler', toPayAmount: 0, depositAmount: 0 };
+        const newStudentData = {
+            classId: -1,
+            userId: 1,
+            firstname: 'Neuer',
+            lastname: 'Schüler',
+            toPayAmount: 0,
+            depositAmount: 0
+        };
         await POST(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Student`, newStudentData);
         // Neu laden der Schülerdaten
         setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
@@ -100,7 +107,7 @@ function StudentTable({ activeClass }) {
     // Gib die Tabelle zurück
     return (
         <div className="bd-example">
-            <div style={{ height: '5dvh' }}></div>
+            <div style={{height: '5dvh'}}></div>
             <div
                 data-bs-spy="scroll"
                 data-bs-target="#navbar-example2"
@@ -108,7 +115,7 @@ function StudentTable({ activeClass }) {
                 data-bs-smooth-scroll="true"
                 className="scrollspy-example bg-body-tertiary p-3 rounded-2"
                 tabIndex="0"
-                style={{ maxHeight: '75dvh', minHeight: '75dvh', overflowY: 'auto' }}
+                style={{maxHeight: '75dvh', minHeight: '75dvh', overflowY: 'auto'}}
             >
                 {renderTable()}
             </div>

@@ -1,21 +1,34 @@
-import React, {useEffect, useState} from 'react';
-import {FaUser, FaLock} from "react-icons/fa";
-import {GET} from "../../apiUtility";
-import {Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import { FaUser, FaLock } from "react-icons/fa";
+import { Link, Redirect } from 'react-router-dom';
+import Cookies from 'js-cookie'; // Importieren Sie Cookies aus dem js-cookie-Paket
 import "../Login/css/Login.css"
 
-function Login() {
+function Login({ handleLogin }) {
 
-    const [students, setStudents] = useState([]);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [loggedIn, setLoggedIn] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const api = "";
-            const data = await GET(api);
-            setStudents(data);
-        };
-        fetchData();
-    }, []);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Überprüfen Sie hier die Anmeldeinformationen
+        if (username === 'tom' && password === '1234') {
+            // Anmeldung erfolgreich, rufen Sie handleLogin auf
+            handleLogin();
+            setLoggedIn(true);
+            // Benutzerinformationen in Cookies speichern
+            Cookies.set('username', username);
+            Cookies.set('loggedIn', true);
+        } else {
+            alert('Invalid username or password');
+        }
+    };
+
+    if (loggedIn) {
+        // Wenn der Benutzer eingeloggt ist, leiten Sie ihn zur Hauptseite weiter
+        return <Redirect to="/" />;
+    }
 
     return (
         <>
@@ -24,37 +37,24 @@ function Login() {
                     <div className="row d-flex align-items-center justify-content-center h-100">
                         <div className="col-md-8 col-lg-7 col-xl-6">
                             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
-                                 className="img-fluid" alt="Phone image"/>
+                                 className="img-fluid" alt="Phone image" />
                         </div>
                         <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                             <h1>Login</h1>
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 <div className="form-outline mb-4">
-                                    {/*<label className="form-label" htmlFor="form1Example13">Username</label>*/}
-                                    <input type="text" id="form1Example13" className="form-control form-control-lg"
-                                           placeholder="Username"/>
+                                    <input type="text" id="username" className="form-control form-control-lg"
+                                           placeholder="Username" value={username}
+                                           onChange={(e) => setUsername(e.target.value)} />
                                 </div>
 
                                 <div className="form-outline mb-4">
-                                {/*<label className="form-label" htmlFor="form1Example23">Password</label>*/}
-                                    <input type="password" id="form1Example23"
-                                           className="form-control form-control-lg" placeholder="Password"/>
+                                    <input type="password" id="password"
+                                           className="form-control form-control-lg" placeholder="Password"
+                                           value={password} onChange={(e) => setPassword(e.target.value)} />
                                 </div>
 
-                                <div className="d-flex justify-content-around align-items-center mb-4">
-
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" value="" id="form1Example3"
-                                               checked/>
-                                        <label className="form-check-label" htmlFor="form1Example3"> Remember
-                                            me </label>
-                                    </div>
-                                    <a href="#!">Forgot password?</a>
-                                </div>
-
-                                <Link to="/home">
-                                    <button type="submit" className="btn btn-primary btn-lg btn-block">Sign in</button>
-                                </Link>
+                                <button type="submit" className="btn btn-primary btn-lg btn-block">Sign in</button>
 
                                 <div>
                                     <p>Don't have an account? <Link to="/register">Register</Link></p>
@@ -63,13 +63,13 @@ function Login() {
                                     <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
                                 </div>
 
-                                <a className="btn btn-primary btn-lg btn-block" style={{backgroundColor: '#3b5998'}}
+                                <a className="btn btn-primary btn-lg btn-block" style={{ backgroundColor: '#3b5998' }}
                                    href="#!"
                                    role="button">
                                     <i className="fab fa-facebook-f me-2"></i>Continue with Facebook
                                 </a>
-                                <br/>
-                                <a className="btn btn-primary btn-lg btn-block" style={{backgroundColor: '#55acee'}}
+                                <br />
+                                <a className="btn btn-primary btn-lg btn-block" style={{ backgroundColor: '#55acee' }}
                                    href="#!"
                                    role="button">
                                     <i className="fab fa-twitter me-2"></i>Continue with Twitter</a>
