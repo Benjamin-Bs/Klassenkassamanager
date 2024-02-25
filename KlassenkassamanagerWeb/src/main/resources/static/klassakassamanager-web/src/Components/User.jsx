@@ -15,7 +15,7 @@ function User(){
                 <li>
                     <hr className="dropdown-divider"/>
                 </li>
-                <li><Link className="dropdown-item" to="/login">Sign out</Link></li>
+                <li><Link className="dropdown-item" to="/login">Sign out</Link></li> {/*Todo delete cookies*/}
             </ul>
         </div>
     );
