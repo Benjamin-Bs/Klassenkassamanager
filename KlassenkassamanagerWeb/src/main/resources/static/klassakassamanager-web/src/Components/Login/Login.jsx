@@ -13,7 +13,7 @@ function Login({ handleLogin }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Überprüfen Sie hier die Anmeldeinformationen
-        if (username === 'tom' && password === '1234') {
+        if (username === 'Tom' && password === '1234') {
             // Anmeldung erfolgreich, rufen Sie handleLogin auf
             handleLogin();
             setLoggedIn(true);

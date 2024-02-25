@@ -2,6 +2,7 @@ import User from "./User";
 import React, {useEffect, useState} from "react";
 import {GET} from "../apiUtility";
 import StudentTable from "./StudentTable";
+import Cookies from "js-cookie";
 function MainPart() {
 
     const [classes, setClasses] = useState([]);
@@ -9,7 +10,7 @@ function MainPart() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const classData = await GET(`http://localhost:8080/klassenkassa-manager/User/${sessionStorage.getItem("userName")}/Classes`);
+            const classData = await GET(`http://localhost:8080/klassenkassa-manager/User/${Cookies.get('username')}/Classes`);
             setClasses(classData);
             setActiveClass(classData[0])
         };
