@@ -23,19 +23,6 @@ async function GET(apiUrl) {
 
 export {GET};
 
-
-export const DELETE = async (url) => {
-    try {
-        const response = await fetch(url, {
-            method: 'DELETE',
-        });
-        //const responseData = await response.json();
-        //return responseData;
-    } catch (error) {
-        console.error('Error while making DELETE request:', error);
-        throw error;
-    }
-};
 export const POST = async (url, data) => {
     try {
         const response = await fetch(url, {
@@ -49,6 +36,36 @@ export const POST = async (url, data) => {
         //return responseData;
     } catch (error) {
         console.error('Error while making POST request:', error);
+        throw error;
+    }
+};
+
+export const PATCH = async (url, data) => {
+    try {
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: (typeof data === 'object'?JSON.stringify(data):data),
+        });
+        //const responseData = await response.json();
+        //return responseData;
+    } catch (error) {
+        console.error('Error while making DELETE request:', error);
+        throw error;
+    }
+};
+
+export const DELETE = async (url) => {
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+        });
+        //const responseData = await response.json();
+        //return responseData;
+    } catch (error) {
+        console.error('Error while making DELETE request:', error);
         throw error;
     }
 };

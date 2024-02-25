@@ -12,7 +12,8 @@ function StudentTable({ activeClass }) {
     // Rufe die Funktion 'getStudentsFromClass' auf, um die Schülerdaten zu erhalten
     useEffect(() => {
         const fetchData = async () => {
-            if (activeClass.id !== undefined) {
+            console.log(activeClass)
+            if (activeClass && activeClass.id) {
                 const studentsData = await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`);
                 setStudents(studentsData);
             }
@@ -60,42 +61,16 @@ function StudentTable({ activeClass }) {
     };
 
     const mouseDown = (selectedIndex) => {
-        setStartingIndex(selectedIndex); // Setze den ausgewählten Schüler
-        //console.log(student)
+        setStartingIndex(selectedIndex);
     };
     const mouseUp = (selectedIndex) => {
         const firstIndex = Math.min(startingIndex, selectedIndex);
         const lastIndex = Math.max(startingIndex, selectedIndex);
 
         const newStudents = students.filter((student, index) => (firstIndex <= index && index <= lastIndex));
-        console.log(newStudents)
         setSelectedStudents(newStudents);
     };
 
-
-    // Funktion zum Hinzufügen eines neuen Schülers
-    const addStudent = async (activeClass) => {
-        console.log(activeClass)
-        // Annahme: 'activeClass.id' ist die aktive Klassen-ID
-        const newStudentData = {classId: -1, userId: 1, firstname: 'Neuer', lastname: 'Schüler', toPayAmount: 0, depositAmount: 0 };
-        await POST(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Student`, newStudentData);
-        // Neu laden der Schülerdaten
-        setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
-    };
-
-    // Funktion zum Löschen eines Schülers
-    const deleteStudent = async () => {
-        if (selectedStudents.length !== 0) {
-            for (const selectedStudent of selectedStudents) {
-                // Annahme: 'selectedStudent.id' ist die ID des ausgewählten Schülers
-                await DELETE(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}`);
-                // Neu laden der Schülerdaten
-                const updatedStudentsData = await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`);
-                setStudents(updatedStudentsData);
-                setSelectedStudents([]); // Zurücksetzen des ausgewählten Schülers nach dem Löschen
-            }
-        }
-    };
 
     // Gib die Tabelle zurück
     return (
@@ -113,9 +88,10 @@ function StudentTable({ activeClass }) {
                 {renderTable()}
             </div>
             <EditBar
-                onAddStudent={(() => addStudent(activeClass))} // Weitergabe der Funktion zum Hinzufügen eines Schülers
-                onDeleteStudent={deleteStudent} // Weitergabe der Funktion zum Löschen eines Schülers
-                studentsSelected={selectedStudents.length} // Weitergabe, ob ein Schüler ausgewählt ist
+                selectedStudents={selectedStudents}
+                activeClassBinding={activeClass}
+                setStudentsBinding={setStudents}
+                setSelectedStudentsBinding={setSelectedStudents}
             />
         </div>
     );
