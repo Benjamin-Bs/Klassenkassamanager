@@ -89,7 +89,7 @@ function StudentTable({activeClass}) {
                 {renderTable()}
             </div>
             {
-                (Number(activeClass.ownerId) === Number(Cookies.get('userId'))) && (<EditBar
+                activeClass && (Number(activeClass.ownerId) === Number(Cookies.get('userId'))) && (<EditBar
                     selectedStudents={selectedStudents}
                     activeClassBinding={activeClass}
                     setStudentsBinding={setStudents}
