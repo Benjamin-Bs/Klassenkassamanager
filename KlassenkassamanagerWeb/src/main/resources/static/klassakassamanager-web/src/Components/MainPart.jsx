@@ -52,6 +52,7 @@ function MainPart() {
                     <ul className="nav nav-pills flex-column mb-auto">
                         {fillList()}
                     </ul>
+                    {/*Add Button*/}
                     <button className="btn btn-secondary" aria-current="page" style={{width: '100%'}} onClick={{/**/}}>
                         <svg className="bi me-2" width="16" height="16">
                             <use xlinkHref="#home"></use>
