@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 @Repository
@@ -91,7 +92,7 @@ public class ClassRepository {
     }
 
     public Class addClass(Class classObject) throws SQLException {
-        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(INSERT_CLASS_SQL)) {
+        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(INSERT_CLASS_SQL, Statement.RETURN_GENERATED_KEYS)) {
             addClassToResultSet(ps, classObject);
 
             int rowsAffected = ps.executeUpdate();
@@ -100,16 +101,17 @@ public class ClassRepository {
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int generatedId = generatedKeys.getInt(1);
-                        LOGGER.info("Student added successfully with ID: {}", generatedId);
+                        LOGGER.info("Class added successfully with ID: {}", generatedId);
                         return new Class(generatedId, classObject.getOwnerId(), classObject.getDepartment(), classObject.getDateOfFounding());
                     } else {
-                        throw new SQLException("Failed to get the auto-generated ID after student insertion");
+                        throw new SQLException("Failed to get the auto-generated ID after class insertion");
                     }
                 }
             } else {
-                throw new SQLException("Failed to Add Student");
+                throw new SQLException("Failed to Add Class");
             }
         }
+
     }
 
     public Class updateStudent(int id, Class classObject) throws SQLException {

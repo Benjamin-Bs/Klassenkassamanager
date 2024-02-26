@@ -90,11 +90,11 @@ function MainPart() {
                             const currentDate = new Date();
 
                             const newClass = {
-                                ownerID: 5,
+                                ownerId: Number(Cookies.get('userId')),
                                 department: departmentValue,
                                 dateOfFounding: currentDate
                             };
-                                        POST("http://localhost:8080/klassenkassa-manager/Class/",newClass)
+                            POST("http://localhost:8080/klassenkassa-manager/Class/",newClass);
 
                             }}>Confirm
                             </button>
