@@ -35,6 +35,10 @@ public class UserRepository {
             "SELECT * FROM WebUser " +
                     "WHERE id = ?;";
 
+    private static final String SELECT_ID_SQL =
+            "SELECT id FROM WebUser " +
+                    "WHERE userName = ? AND password = ?;";
+
     private static final String INSERT_USER_SQL =
             "INSERT INTO WebUser " +
                     "(userName, password) " +
@@ -49,6 +53,34 @@ public class UserRepository {
             "DELETE FROM WebUser " +
                     "WHERE id = ?";
 
+
+    public boolean isUser(User user) {
+        LOGGER.info(user.getUsername() + " + " + user.getPassword());
+        try {
+            getIdByUser(user);
+        }catch (SQLException e){
+            LOGGER.info("false");
+            return false;
+        }
+        LOGGER.info("true");
+        return true;
+    }
+
+    public int getIdByUser(User user) throws SQLException {
+        PreparedStatement ps = jdbcTemplate.getDataSource().getConnection()
+                .prepareStatement(SELECT_ID_SQL);
+        ps.setString(1, user.getUsername());
+        ps.setString(2, user.getPassword());
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            int id = rs.getInt("id");
+            LOGGER.info("Selected Id: " + id);
+            return id;
+        } else {
+            throw new SQLException("Could not fetch data from database");
+        }
+    }
 
     public User getUserById(int id) throws SQLException {
         PreparedStatement ps = jdbcTemplate.getDataSource().getConnection()

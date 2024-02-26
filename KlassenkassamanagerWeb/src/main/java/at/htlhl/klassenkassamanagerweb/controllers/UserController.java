@@ -26,6 +26,27 @@ public class UserController {
     ClassRepository classRepository = new ClassRepository();
     UserRepository userRepository = new UserRepository();
 
+    @GetMapping(value = "/isUser", produces = "text/plain")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Delete a Student by id")
+    public String isUser(@RequestParam String username, @RequestParam String password) throws SQLException {
+        boolean userExists = userRepository.isUser(new User(username, password));
+        return Boolean.toString(userExists); // Convert boolean to string representation
+    }
+
+    @GetMapping(value = "/Id", produces = "text/plain")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Delete a Student by id")
+    public String getIdByUser(@RequestParam String username, @RequestParam String password) throws SQLException {
+        int userId;
+        try {
+            userId = userRepository.getIdByUser(new User(username, password));
+        }catch (SQLException e){
+            return "-1";
+        }
+        return Integer.toString(userId);
+    }
+
     /**
      * Retrieves all classes associated with a user.
      *
@@ -97,13 +118,6 @@ public class UserController {
         userRepository.deleteUserById(id);
     }
 
-
-    @GetMapping(value = "/isvalid")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Valid the Login information")
-    public void isLoginValid(){
-
-    }
 
     /**
      * Sets the StudentRepository for the controller.

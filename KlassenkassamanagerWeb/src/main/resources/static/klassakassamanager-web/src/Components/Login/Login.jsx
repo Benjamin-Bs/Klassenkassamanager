@@ -3,6 +3,9 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { Link, Redirect } from 'react-router-dom';
 import Cookies from 'js-cookie'; // Importieren Sie Cookies aus dem js-cookie-Paket
 import "../Login/css/Login.css"
+import {GET} from "../../apiUtility";
+const CryptoJS = require('crypto-js');
+
 
 function Login({ handleLogin }) {
 
@@ -13,16 +16,25 @@ function Login({ handleLogin }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Überprüfen Sie hier die Anmeldeinformationen
-        if (username === 'Tom' && password === '1234') {
-            // Anmeldung erfolgreich, rufen Sie handleLogin auf
-            handleLogin();
-            setLoggedIn(true);
-            // Benutzerinformationen in Cookies speichern
-            Cookies.set('username', username);
-            Cookies.set('loggedIn', true);
-        } else {
-            alert('Invalid username or password');
-        }
+        console.log({"username": username,"password": password});
+        GET(`http://localhost:8080/klassenkassa-manager/User/Id?username=${username}&password=${password}`)
+            .then(result => {
+                if (result !== -1) {
+                    // Anmeldung erfolgreich, rufen Sie handleLogin auf
+                    handleLogin();
+                    setLoggedIn(true);
+                    // Benutzerinformationen in Cookies speichern
+                    Cookies.set('username', username);
+                    Cookies.set('userId', result);
+                    Cookies.set('loggedIn', true);
+                } else {
+                    alert('Invalid username or password');
+                }
+            })
+            .catch(error => {
+                alert('Invalid username or password');
+            });
+
     };
 
     if (loggedIn) {

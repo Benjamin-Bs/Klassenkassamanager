@@ -48,9 +48,12 @@ function ConfirmationModal({id, inputs, handleConfirm, title}) {
 
 function AddButton() {
     const addStudent = async (data) => {
-        const username = data.get('username');
         console.log(activeClass)
-        const newStudentData = {classId: -1, userId: 1, firstname: data.get('firstname'), lastname: data.get('lastname'), toPayAmount: 0, depositAmount: 0 };
+        const newStudentData = {classId: -1, userId:
+                data.get('userId')?data.get('userId'):1,
+            firstname: data.get('firstname')?data.get('firstname'):"FIRSTNAME",
+            lastname: data.get('lastname')?data.get('lastname'):"LASTNAME",
+            toPayAmount: 0, depositAmount: 0 };
         await POST(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Student`, newStudentData);
         setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
     };
@@ -74,9 +77,14 @@ function AddButton() {
 function ChangeNameButton({selectedStudents}) {
     const editStudent = async (data) => {
         console.log(activeClass)
-        const newName = {firstname: data.get('firstname'), lastname: data.get('lastname')};
+        const newName = {firstname: data.get('firstname')?data.get('firstname'):selectedStudents[0].firstname,
+            lastname: data.get('lastname')?data.get('lastname'):selectedStudents[0].lastname};
         console.log(newName)
         await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudents[0].id}/name`, newName);
+        if (data.get('userId'))
+        {
+            await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudents[0].id}/userName`, {userId: data.get('userId') ? data.get('userId') : "Default"});
+        }
         setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
     };
 
@@ -108,7 +116,7 @@ function IncreaseDebtButton({selectedStudents}) {
 
     const content = (
         [
-            <input type={"number"} name={"debt"} placeholder={"Debt"} min="0"/>,
+            <input type={"number"} name={"debt"} placeholder={"Debt"} value={"0"} min="0"/>,
         ]
     )
 
@@ -131,7 +139,7 @@ function DepositButton({selectedStudents}) {
 
     const content = (
         [
-            <input type={"number"} name={"depositValue"} placeholder={"Deposit-Amount"} min="0"/>,
+            <input type={"number"} name={"depositValue"} placeholder={"Deposit-Amount"} value={"0"} min="0"/>,
         ]
     )
 

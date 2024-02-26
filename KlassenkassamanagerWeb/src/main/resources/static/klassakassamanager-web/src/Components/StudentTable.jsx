@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {GET, DELETE, POST} from '../apiUtility'; // Annahme: DELETE und POST sind für API-Anfragen
 import EditBar from "./EditBar";
+import Cookies from "js-cookie";
 
 // Erstelle deine React-Komponente
 function StudentTable({activeClass}) {
@@ -87,12 +88,15 @@ function StudentTable({activeClass}) {
             >
                 {renderTable()}
             </div>
-            <EditBar
-                selectedStudents={selectedStudents}
-                activeClassBinding={activeClass}
-                setStudentsBinding={setStudents}
-                setSelectedStudentsBinding={setSelectedStudents}
-            />
+            {
+                (Number(activeClass.ownerId) === Number(Cookies.get('userId'))) && (<EditBar
+                    selectedStudents={selectedStudents}
+                    activeClassBinding={activeClass}
+                    setStudentsBinding={setStudents}
+                    setSelectedStudentsBinding={setSelectedStudents}
+                    />)
+
+            }
         </div>
     );
 }

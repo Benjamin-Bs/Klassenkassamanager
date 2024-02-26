@@ -54,23 +54,30 @@ public class StudentsController {
 
     @PatchMapping(value = "/{id}/debt", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Edit a Students by id")
-    public void increaseDebtById(@PathVariable int id, @RequestBody float increaseDebtValue) throws SQLException {
-        studentRepository.increaseDebt(id, increaseDebtValue);
+    @Operation(summary = "Edit Debt of a Student by id")
+    public void increaseDebtById(@PathVariable int id, @RequestBody float debtValue) throws SQLException {
+        studentRepository.increaseDebt(id, debtValue);
     }
 
     @PatchMapping(value = "/{id}/depositValue", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Edit a Students by id")
+    @Operation(summary = "Edit Deposit-Value of a Student by id")
     public void depositById(@PathVariable int id, @RequestBody float depositValue) throws SQLException {
         studentRepository.deposit(id, depositValue);
     }
 
     @PatchMapping(value = "/{id}/name", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Edit a Students by id")
+    @Operation(summary = "Edit Name of a Student by id")
     public void changeNameById(@PathVariable int id, @RequestBody Student.Name name) throws SQLException {
         studentRepository.updateName(id, name);
+    }
+
+    @PatchMapping(value = "/{id}/userName", consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Edit userId of a Student by id and username")
+    public void changeUserIdById(@PathVariable int id, @RequestBody String username) throws SQLException {
+        studentRepository.updateUserId(id, username);
     }
 
     /**
@@ -81,7 +88,7 @@ public class StudentsController {
      * @throws SQLException if there is a database access error.
      */
     @DeleteMapping(value = "/{id}", produces = "text/plain")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete a Student by id")
     public ResponseEntity<String> deleteStudentById(@PathVariable int id) throws SQLException {
         studentRepository.deleteStudentById(id);

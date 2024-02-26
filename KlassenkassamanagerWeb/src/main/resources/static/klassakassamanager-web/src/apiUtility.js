@@ -1,7 +1,6 @@
 
-async function GET(apiUrl) {
-
-    return fetch(apiUrl)
+async function GET(url) {
+    return fetch(url)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -18,7 +17,6 @@ async function GET(apiUrl) {
             // You may want to rethrow the error to propagate it to the caller
             throw error;
         });
-
 }
 
 export {GET};

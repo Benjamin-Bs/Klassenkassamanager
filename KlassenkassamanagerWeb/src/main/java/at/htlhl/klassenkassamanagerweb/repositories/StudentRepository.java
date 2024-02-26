@@ -93,6 +93,11 @@ public class StudentRepository {
                     "firstname = ?, lastname = ?" +
                     "WHERE id = ?";
 
+    private static final String UPDATE_USER_ID_SQL =
+            "UPDATE Student SET " +
+                    "userId = (SELECT id FROM WebUSER WHERE username = ?) " +
+                    "WHERE id = ?";
+
     private static final String DELETE_STUDENT_SQL =
             "DELETE FROM Student " +
             "WHERE id = ?";
@@ -224,6 +229,23 @@ public class StudentRepository {
             }
         }
     }
+
+    public void updateUserId(int id, String username) throws SQLException {
+        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(UPDATE_USER_ID_SQL)) {
+            ps.setString(1, username);
+            ps.setFloat(2, id);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                LOGGER.info("Student with ID {} updated successfully", id);
+                // Optionally, you can return the updated student
+            } else {
+                throw new SQLException("Student with ID " + id + " not found or could not be updated");
+            }
+        }
+    }
+
 
     public void deleteStudentById(int id) throws SQLException {
         try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(DELETE_STUDENT_SQL)) {
