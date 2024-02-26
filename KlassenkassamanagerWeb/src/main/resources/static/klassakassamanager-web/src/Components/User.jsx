@@ -1,8 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-function User(){
-    return(
+function User() {
+
+    const handleLogout = () => {
+        Cookies.remove('username'); // Entfernen des Benutzernamens-Cookies
+        Cookies.remove('loggedIn'); // Entfernen des loggedIn-Cookies
+    };
+
+    return (
         <div className="dropdown">
             <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -15,7 +22,7 @@ function User(){
                 <li>
                     <hr className="dropdown-divider"/>
                 </li>
-                <li><Link className="dropdown-item" to="/login">Sign out</Link></li> {/*Todo delete cookies*/}
+                <li><Link className="dropdown-item" to="/login" onclick={handleLogout}>Sign out</Link></li>
             </ul>
         </div>
     );

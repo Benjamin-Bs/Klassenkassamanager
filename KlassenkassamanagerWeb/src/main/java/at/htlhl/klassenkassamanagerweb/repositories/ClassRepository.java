@@ -41,12 +41,12 @@ public class ClassRepository {
 
     private static final String SELECT_CLASS_BY_USERNAME_SQL =
             """
-            SELECT Class.id as id, ownerId, department, dateOfFounding 
-            FROM Class 
-            JOIN Student ON Class.id = Student.classId 
-            JOIN WebUser ON Student.userId = WebUser.id 
-            WHERE WebUser.userName = ?;
-            """;
+                    SELECT Class.id as id, ownerId, department, dateOfFounding 
+                    FROM Class 
+                    JOIN Student ON Class.id = Student.classId 
+                    JOIN WebUser ON Student.userId = WebUser.id 
+                    WHERE WebUser.userName = ?;
+                    """;
 
     private static final String INSERT_CLASS_SQL =
             "INSERT INTO Class " +
@@ -97,15 +97,15 @@ public class ClassRepository {
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                //try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                //if (generatedKeys.next()) {
-                //    int generatedId = generatedKeys.getInt(1);
-                //    LOGGER.info("Student added successfully with ID: {}", generatedId);
-                return classObject;
-                //} else {
-                //    throw new SQLException("Failed to get the auto-generated ID after student insertion");
-                //}
-                //}
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int generatedId = generatedKeys.getInt(1);
+                        LOGGER.info("Student added successfully with ID: {}", generatedId);
+                        return new Class(generatedId, classObject.getOwnerId(), classObject.getDepartment(), classObject.getDateOfFounding());
+                    } else {
+                        throw new SQLException("Failed to get the auto-generated ID after student insertion");
+                    }
+                }
             } else {
                 throw new SQLException("Failed to Add Student");
             }

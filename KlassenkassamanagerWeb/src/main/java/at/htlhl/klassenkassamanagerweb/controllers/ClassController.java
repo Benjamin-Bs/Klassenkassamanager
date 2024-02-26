@@ -67,7 +67,6 @@ public class ClassController {
     }
 
     /**
-     *
      * @param classObject
      * @return
      * @throws SQLException
@@ -76,11 +75,12 @@ public class ClassController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Create a Class")
     public Class addClass(@RequestBody Class classObject) throws SQLException {
-        return classRepository.addClass(classObject);
+        Class returnClass = classRepository.addClass(classObject);
+        //studentRepository.addStudent(returnClass.getId(), new  Student(25, classObject.getOwnerId(), "FIRSTNAME", "LASTNAME", 0, 0));
+        return returnClass;
     }
 
     /**
-     *
      * @param id
      * @param classObject
      * @return
@@ -95,6 +95,7 @@ public class ClassController {
 
     /**
      * To delete the the class
+     *
      * @param id
      * @return
      * @throws SQLException
@@ -108,7 +109,6 @@ public class ClassController {
     }
 
     /**
-     *
      * @param studentRepository
      */
     @Autowired
@@ -117,7 +117,6 @@ public class ClassController {
     }
 
     /**
-     *
      * @param classRepository
      */
     @Autowired
