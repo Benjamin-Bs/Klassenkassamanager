@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
 import {GET} from "../../apiUtility";
+import Cookies from "js-cookie";
+
 
 function Account() {
 
     const [file, setFile] = useState();
+
     function handleChange(e) {
         console.log(e.target.files);
         setFile(URL.createObjectURL(e.target.files[0]));
@@ -18,21 +21,16 @@ function Account() {
                         <th>Name:</th>
                     </tr>
                     <tr>
-                        <td>Bob Boblio</td>
+                        <td> {Cookies.get('username')}</td>
                     </tr>
-                    <tr>
-                        <th>Email:</th>
-                    </tr>
-                    <tr>
-                        <td>boblioooo@gmail.com</td>
-                    </tr>
+
                 </table>
 
-                <div>
-                    <h2>Add Image:</h2>
-                    <input type="file" onChange={handleChange}/>
-                    <img src={file}/>
-                </div>
+                {/*<div>*/}
+                {/*    <h2>Add Image:</h2>*/}
+                {/*    <input type="file" onChange={handleChange}/>*/}
+                {/*    <img src={file}/>*/}
+                {/*</div>*/}
             </div>
         </div>
     );

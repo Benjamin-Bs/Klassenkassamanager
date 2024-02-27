@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { FaUser, FaLock } from "react-icons/fa";
-import { Link, Redirect } from 'react-router-dom';
+import React, {useState} from 'react';
+import {FaUser, FaLock} from "react-icons/fa";
+import {Link, Redirect} from 'react-router-dom';
 import Cookies from 'js-cookie'; // Importieren Sie Cookies aus dem js-cookie-Paket
 import "../Login/css/Login.css"
 import {GET} from "../../apiUtility";
+import {FaGoogle} from "react-icons/fa";
+
+
 const CryptoJS = require('crypto-js');
 
 
-function Login({ handleLogin }) {
+function Login({handleLogin}) {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -26,7 +29,7 @@ function Login({ handleLogin }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Überprüfen Sie hier die Anmeldeinformationen
-        console.log({"username": username,"password": password});
+        console.log({"username": username, "password": password});
         GET(`http://localhost:8080/klassenkassa-manager/User/Id?username=${username}&password=${password}`)
             .then(result => {
                 if (result !== -1) {
@@ -48,7 +51,7 @@ function Login({ handleLogin }) {
     };
 
     if (loggedIn) {
-        return <Redirect to="/" />;
+        return <Redirect to="/"/>;
     }
 
     return (
@@ -57,17 +60,22 @@ function Login({ handleLogin }) {
                 <div className="container py-5 h-100">
                     <div className="row d-flex align-items-center justify-content-center h-100">
                         <div className="col-md-8 col-lg-7 col-xl-6">
-                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" className="img-fluid" alt="Phone image" />
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                                 className="img-fluid" alt="Phone image"/>
                         </div>
                         <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                             <h1>Login</h1>
                             <form onSubmit={handleSubmit}>
                                 <div className="form-outline mb-4">
-                                    <input type="text" id="username" className="form-control form-control-lg" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                                    <input type="text" id="username" className="form-control form-control-lg"
+                                           placeholder="Username" value={username}
+                                           onChange={(e) => setUsername(e.target.value)}/>
                                 </div>
 
                                 <div className="form-outline mb-4">
-                                    <input type="password" id="password" className="form-control form-control-lg" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    <input type="password" id="password" className="form-control form-control-lg"
+                                           placeholder="Password" value={password}
+                                           onChange={(e) => setPassword(e.target.value)}/>
                                 </div>
 
                                 <button type="submit" className="btn btn-primary btn-lg btn-block">Sign in</button>
@@ -78,14 +86,12 @@ function Login({ handleLogin }) {
                                 <div className="divider d-flex align-items-center my-4">
                                     <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
                                 </div>
-
-                                <button className="btn btn-primary btn-lg btn-block" style={{ backgroundColor: '#3b5998' }} onClick={handleOAuth2Login}>
-                                    <i className="fab fa-facebook-f me-2"></i>Continue with Facebook
-                                </button>
-                                <br />
-                                <button className="btn btn-primary btn-lg btn-block" style={{ backgroundColor: '#55acee' }} onClick={handleOAuth2Login}>
-                                    <i className="fab fa-twitter me-2"></i>Continue with Twitter
-                                </button>
+                                <div className="container">
+                                    <button className="btn btn-primary btn-lg btn-block"
+                                            style={{backgroundColor: '#DB4437'}} onClick={handleOAuth2Login}>
+                                        <i className="fab fa-google-f me-2"></i>Continue with Google <FaGoogle/>
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>

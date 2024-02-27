@@ -1,0 +1,10 @@
+.container {
+    display: flex;
+    justify-content: center; /* Horizontal zentrieren */
+    align-items: center; /* Vertikal zentrieren */
+    height: 100vh; /* Volle Höhe des Viewports verwenden */
+}
+
+.content {
+    text-align: center; /* Zentrieren des Inhalts innerhalb des Containers */
+}

@@ -53,6 +53,15 @@ public class StudentRepository {
         ps.setFloat(6, student.getToPayAmount());
     }
 
+    private void addStudentWithUsernameToResultSet(PreparedStatement ps, Student student) throws SQLException {
+        ps.setInt(1, student.getClassId());
+        ps.setString(2, student.getUsername());
+        ps.setString(3, student.getFirstname());
+        ps.setString(4, student.getLastname());
+        ps.setFloat(5, student.getDepositAmount());
+        ps.setFloat(6, student.getToPayAmount());
+    }
+
     private void addStudentToResultSetWithId(PreparedStatement ps, Student student) throws SQLException {
         ps.setInt(1, student.getId());
         ps.setInt(2, student.getClassId());
@@ -72,6 +81,10 @@ public class StudentRepository {
             "(classId, userId, firstname, lastname, depositAmount, toPayAmount) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
 
+    private static final String INSERT_STUDENT_WITH_USERNAME_SQL =
+            "INSERT INTO Student " +
+                    "(classId, userId, firstname, lastname, depositAmount, toPayAmount) " +
+                    "VALUES (?, (SELECT id FROM WebUSER WHERE username = ?), ?, ?, ?, ?)";
 
     /*private static final String UPDATE_STUDENT_SQL =
             "UPDATE Student SET " +
@@ -159,6 +172,29 @@ public class StudentRepository {
         }
     }
 
+    public Student addStudentWithUsername(int classId, Student student) throws SQLException {
+        try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(INSERT_STUDENT_WITH_USERNAME_SQL)) {
+            addStudentWithUsernameToResultSet(ps, student);
+            ps.setInt(1, classId);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                //try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                //if (generatedKeys.next()) {
+                //    int generatedId = generatedKeys.getInt(1);
+                //    LOGGER.info("Student added successfully with ID: {}", generatedId);
+                return student;
+                //} else {
+                //    throw new SQLException("Failed to get the auto-generated ID after student insertion");
+                //}
+                //}
+            } else {
+                throw new SQLException("Failed to Add Student");
+            }
+        }
+    }
+
     /** depricated (might be to risky) */
     /*public Student updateStudent(int id, Student student) throws SQLException {
         try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(UPDATE_STUDENT_SQL)) {
@@ -232,6 +268,7 @@ public class StudentRepository {
 
     public void updateUserId(int id, String username) throws SQLException {
         try (PreparedStatement ps = jdbcTemplate.getDataSource().getConnection().prepareStatement(UPDATE_USER_ID_SQL)) {
+            LOGGER.info(username);
             ps.setString(1, username);
             ps.setFloat(2, id);
 

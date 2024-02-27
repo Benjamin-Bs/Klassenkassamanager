@@ -16,6 +16,8 @@ public class Student {
      */
     private int userId;
 
+    private String username;
+
     /**
      * The first name of the student.
      */
@@ -58,6 +60,16 @@ public class Student {
         this.depositAmount = depositAmount;
         this.toPayAmount = toPayAmount;
     }
+
+    public Student(int classId, String username, String firstname, String lastname, float depositAmount, float toPayAmount) {
+        this.classId = classId;
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.depositAmount = depositAmount;
+        this.toPayAmount = toPayAmount;
+    }
+
     public Student(int id, int classId, int userId, String firstname, String lastname, float depositAmount, float toPayAmount) {
         this.id = id;
         this.classId = classId;
@@ -124,6 +136,9 @@ public class Student {
      */
     public float getToPayAmount() {
         return toPayAmount;
+    }
+    public String getUsername() {
+        return username;
     }
 
     public static class Name{

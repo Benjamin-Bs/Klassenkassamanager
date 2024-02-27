@@ -48,12 +48,12 @@ function ConfirmationModal({id, inputs, handleConfirm, title}) {
 function AddButton() {
     const addStudent = async (data) => {
         console.log(activeClass)
-        const newStudentData = {classId: -1, userId:
-                data.get('userId')?data.get('userId'):1,
+        const newStudentData = {classId: -1, username:
+                data.get('username')?data.get('username'):"Default",
             firstname: data.get('firstname')?data.get('firstname'):"FIRSTNAME",
             lastname: data.get('lastname')?data.get('lastname'):"LASTNAME",
             toPayAmount: 0, depositAmount: 0 };
-        await POST(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Student`, newStudentData);
+        await POST(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/StudentWithUsername`, newStudentData);
         setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
     };
 
@@ -80,9 +80,9 @@ function ChangeNameButton({selectedStudents}) {
             lastname: data.get('lastname')?data.get('lastname'):selectedStudents[0].lastname};
         console.log(newName)
         await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudents[0].id}/name`, newName);
-        if (data.get('userId'))
+        if (data.get('username'))
         {
-            await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudents[0].id}/userName`, {userId: data.get('userId') ? data.get('userId') : "Default"});
+            await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudents[0].id}/userName`, data.get('username') ? data.get('username') : "Default");
         }
         setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
     };
@@ -108,14 +108,16 @@ function IncreaseDebtButton({selectedStudents}) {
     const increaseDebt = async (data) => {
         console.log(activeClass)
         for (const selectedStudent of selectedStudents) {
-            await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}/debt`, parseFloat(data.get('debt')));
-            setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
+            if (data.get('debt')) {
+                await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}/debt`, parseFloat(data.get('debt')));
+                setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
+            }
         }
     };
 
     const content = (
         [
-            <input type={"number"} name={"debt"} placeholder={"Debt"} value={"0"} min="0"/>,
+            <input type={"number"} name={"debt"} placeholder={"Debt"} min="0"/>,
         ]
     )
 
@@ -131,14 +133,16 @@ function DepositButton({selectedStudents}) {
     const deposit = async (data) => {
         console.log(activeClass)
         for (const selectedStudent of selectedStudents) {
-            await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}/depositValue`, parseFloat(data.get('depositValue')));
-            setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
+            if (data.get('depositValue')){
+                await PATCH(`http://localhost:8080/klassenkassa-manager/Student/${selectedStudent.id}/depositValue`, parseFloat(data.get('depositValue')));
+                setStudents(await GET(`http://localhost:8080/klassenkassa-manager/Class/${activeClass.id}/Students`));
+            }
         }
     };
 
     const content = (
         [
-            <input type={"number"} name={"depositValue"} placeholder={"Deposit-Amount"} value={"0"} min="0"/>,
+            <input type={"number"} name={"depositValue"} placeholder={"Deposit-Amount"} min="0"/>,
         ]
     )
 

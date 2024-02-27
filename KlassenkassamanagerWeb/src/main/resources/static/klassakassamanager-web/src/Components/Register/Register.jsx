@@ -11,6 +11,23 @@ function Register() {
         const repeatPasswordInput = document.getElementById('repeat');
         const termsCheckbox = document.getElementById('terms');
 
+        // Überprüfung, ob alle Felder ausgefüllt sind
+        if (!nameInput.value || !passwordInput.value || !repeatPasswordInput.value) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        // Überprüfung, ob das Passwort mindestens 8 Zeichen lang ist
+        if (passwordInput.value.length < 8) {
+            alert('Password must be at least 8 characters long');
+            return;
+        }
+
+        if (!/[A-Z]/.test(passwordInput.value)) {
+            alert('Password must contain at least one uppercase letter');
+            return;
+        }
+
         // Überprüfung, ob das Passwort übereinstimmt
         if (passwordInput.value !== repeatPasswordInput.value) {
             alert('Passwords do not match');
@@ -56,22 +73,14 @@ function Register() {
                                     <form>
                                         <div className="form-outline mb-4">
                                             <input type="text" className="form-control form-control-lg" placeholder="Name" id="name"/>
-                                            <label className="form-label" htmlFor="form3Example1cg">Your Name</label>
-                                        </div>
-
-                                        <div className="form-outline mb-4">
-                                            <input type="email" className="form-control form-control-lg" placeholder="Email"/>
-                                            <label className="form-label" htmlFor="form3Example3cg">Your Email</label>
                                         </div>
 
                                         <div className="form-outline mb-4">
                                             <input type="password" className="form-control form-control-lg" placeholder="Password" id="password"/>
-                                            <label className="form-label" htmlFor="form3Example4cg">Password</label>
                                         </div>
 
                                         <div className="form-outline mb-4">
                                             <input type="password" className="form-control form-control-lg" placeholder="Repeat Password" id="repeat"/>
-                                            <label className="form-label" htmlFor="form3Example4cdg">Repeat your password</label>
                                         </div>
 
                                         <div className="form-check d-flex justify-content-center mb-5">

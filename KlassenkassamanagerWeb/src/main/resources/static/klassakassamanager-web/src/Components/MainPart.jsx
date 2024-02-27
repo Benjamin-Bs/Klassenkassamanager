@@ -30,7 +30,7 @@ function MainPart() {
                         <use xlinkHref="#home"></use>
                     </svg>
                     {currentClass.department}
-                    {Number(currentClass.ownerId) === Number(Cookies.get('userId'))?" [owner]":""}
+                    {Number(currentClass.ownerId) === Number(Cookies.get('userId')) ? " [owner]" : ""}
                 </button>
             </li>
         ));
@@ -58,11 +58,8 @@ function MainPart() {
                         <svg className="bi me-2" width="16" height="16">
                             <use xlinkHref="#home"></use>
                         </svg>
-                        {/*<RiAddFill/>*/}
-                        Test
+                        <RiAddFill/>
                     </button>
-
-
                     <hr/>
                     <User/>
                 </div>
@@ -82,19 +79,19 @@ function MainPart() {
                             <input id="departmentInput" placeholder="Class name"/>
                         </div>
                         <div className="modal-footer">
-                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal"
+                            <button type="button" className="btn btn-primary" data-bs-dismiss="modal"
                                     type={"submit"} onClick={() => {
 
-                            const departmentInput = document.querySelector('#departmentInput');
-                            const departmentValue = departmentInput.value;
-                            const currentDate = new Date();
+                                const departmentInput = document.querySelector('#departmentInput');
+                                const departmentValue = departmentInput.value;
+                                const currentDate = new Date();
 
-                            const newClass = {
-                                ownerId: Number(Cookies.get('userId')),
-                                department: departmentValue,
-                                dateOfFounding: currentDate
-                            };
-                            POST("http://localhost:8080/klassenkassa-manager/Class/",newClass);
+                                const newClass = {
+                                    ownerId: Number(Cookies.get('userId')),
+                                    department: departmentValue,
+                                    dateOfFounding: currentDate
+                                };
+                                POST("http://localhost:8080/klassenkassa-manager/Class/", newClass);
 
                             }}>Confirm
                             </button>

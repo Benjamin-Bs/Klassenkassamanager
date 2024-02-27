@@ -66,6 +66,13 @@ public class ClassController {
         return studentRepository.addStudent(id, student);
     }
 
+    @PostMapping(value = "/{id}/StudentWithUsername", consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Create a Students in a Class")
+    public Student addStudentWithUsernameToClass(@PathVariable int id, @RequestBody Student student) throws SQLException {
+        return studentRepository.addStudentWithUsername(id, student);
+    }
+
     /**
      * @param classObject
      * @return
