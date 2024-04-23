@@ -83,7 +83,7 @@ public class ClassController {
     @Operation(summary = "Create a Class")
     public Class addClass(@RequestBody Class classObject) throws SQLException {
         Class returnClass = classRepository.addClass(classObject);
-        studentRepository.addStudent(returnClass.getId(), new  Student(25, classObject.getOwnerId(), "FIRSTNAME", "LASTNAME", 0, 0));
+        studentRepository.addStudent(returnClass.getId(), new Student(25, classObject.getOwnerId(), "FIRSTNAME", "LASTNAME", 0, 0));
         return returnClass;
     }
 
