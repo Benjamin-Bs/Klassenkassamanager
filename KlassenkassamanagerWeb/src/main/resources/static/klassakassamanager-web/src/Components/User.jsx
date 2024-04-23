@@ -22,10 +22,9 @@ function User() {
                 <li>
                     <hr className="dropdown-divider"/>
                 </li>
-                <li><Link className="dropdown-item" to="/login" onclick={handleLogout}>Sign out</Link></li>
+                <li><Link className="dropdown-item" to="/login" onClick={handleLogout}>Sign out</Link></li>
             </ul>
         </div>
     );
 }
-
 export default User;
